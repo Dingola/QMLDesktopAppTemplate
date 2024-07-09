@@ -125,14 +125,14 @@ if (${main_project_name}_BUILD_TARGET_TYPE STREQUAL executable)
 	# Run windeployqt immediately after build
 	add_custom_command(TARGET ${PROJECT_NAME}
 		POST_BUILD
-		COMMAND "${WINDEPLOYQT_ENV_SETUP}" && "${WINDEPLOYQT_EXECUTABLE}" \"$<TARGET_FILE:${PROJECT_NAME}>\" "--qmldir=D:\\Projects\\VS_Projects\\QMLDesktopAppTemplate\\QMLDesktopAppTemplate\\Sources\\QML"
+		COMMAND "${WINDEPLOYQT_ENV_SETUP}" && "${WINDEPLOYQT_EXECUTABLE}" \"$<TARGET_FILE:${PROJECT_NAME}>\" "--qmldir=${CMAKE_CURRENT_SOURCE_DIR}/Sources/QML"
 		COMMENT "Running windeployqt..."
 	)
 	
 	# Run windeployqt immediately after build
 	#add_custom_command(TARGET ${PROJECT_NAME}
 	#	POST_BUILD
-	#	COMMAND "${WINDEPLOYQT_ENV_SETUP}" && "${WINDEPLOYQT_EXECUTABLE}" \"$<TARGET_FILE:${PROJECT_NAME}>\" "--qmldir=D:\\Projects\\VS_Projects\\QMLDesktopAppTemplate\\QMLDesktopAppTemplate\\Style"
+	#	COMMAND "${WINDEPLOYQT_ENV_SETUP}" && "${WINDEPLOYQT_EXECUTABLE}" \"$<TARGET_FILE:${PROJECT_NAME}>\" "--qmldir=${CMAKE_CURRENT_SOURCE_DIR}/Style"
 	#	COMMENT "Running windeployqt..."
 	#)
 endif()
