@@ -3,10 +3,11 @@
  * @brief This file contains the main function of the application.
  */
 
-#include <QObject>
-#include <QApplication>
 #include <QGuiApplication>
-#include <QQmlApplicationEngine>
+
+#include "QmlApplication.h"
+
+using namespace QmlApp;
 
 /**
  * @brief The main function of the application initializes the Qt application, sets necessary attributes,
@@ -28,14 +29,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+    QmlApplication qml_app;
 
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/Sources/QML/main.qml")));
-
-    if (engine.rootObjects().isEmpty())
-    {
-        return -1;
-    }
-
-    return app.exec();
+    return qml_app.exec();
 }
