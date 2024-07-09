@@ -3,6 +3,9 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
+#include "AppSettings.h"
+#include "Models/SettingsModel.h"
+
 namespace QmlApp
 {
     class QmlApplication : public QObject
@@ -20,6 +23,8 @@ namespace QmlApp
 
     private:
         QQmlApplicationEngine m_engine;
+        AppSettings m_settings;
+        SettingsModel m_settings_model;
 
     };
 }

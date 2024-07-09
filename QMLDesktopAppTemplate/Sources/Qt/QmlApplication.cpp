@@ -7,6 +7,8 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QString>
+#include <QQmlContext>
 
 namespace QmlApp
 {
@@ -16,8 +18,19 @@ namespace QmlApp
      * @param parent The parent object.
      */
     QmlApplication::QmlApplication(QObject* parent)
-        : QObject(parent), m_engine()
+        : QObject(parent), m_engine(), m_settings(), m_settings_model(&m_settings)
     {
+        qmlRegisterType<AppSettings>("app.settings", 1, 0, "AppSettings");
+        qmlRegisterType<SettingsModel>("app.settings", 1, 0, "SettingsModel");
+        m_engine.rootContext()->setContextProperty(QStringLiteral("settings_model"), &m_settings_model);
+
+        // Load settings on startup
+        m_settings_model.loadFromFile("settings.ini");
+
+        // Save settings on application exit
+        connect(qApp, &QApplication::aboutToQuit, [this]() {
+            m_settings_model.saveToFile("settings.ini");
+        });
     }
 
     /**

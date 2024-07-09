@@ -29,6 +29,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+    app.setApplicationName(QStringLiteral("QmlApp"));
+    app.setOrganizationName(QStringLiteral("AdrianHelbig"));
+    app.setOrganizationDomain(QStringLiteral("AdrianHelbig.de"));
+
     QmlApplication qml_app;
 
     return qml_app.exec();
