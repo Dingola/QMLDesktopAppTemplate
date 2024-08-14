@@ -5,6 +5,7 @@
 
 #include "AppSettings.h"
 #include "Models/SettingsModel.h"
+#include "Services/Translator.h"
 
 namespace QmlApp
 {
@@ -13,7 +14,7 @@ namespace QmlApp
         Q_OBJECT
 
     public:
-        QmlApplication(QObject* parent = nullptr);
+        explicit QmlApplication(QObject* parent = nullptr);
         virtual ~QmlApplication() = default;
 
         void load(const QUrl& url);
@@ -25,6 +26,7 @@ namespace QmlApp
         QQmlApplicationEngine m_engine;
         AppSettings m_settings;
         SettingsModel m_settings_model;
+        Translator m_translator;
 
     };
-}
+} // namespace QmlApp

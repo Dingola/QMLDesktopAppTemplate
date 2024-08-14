@@ -12,7 +12,7 @@ namespace QmlApp
         Q_PROPERTY(QStringList keys READ keys NOTIFY keysChanged)
 
     public:
-        explicit SettingsModel(AppSettings* app_settings, QObject* parent = nullptr);
+        explicit SettingsModel(AppSettings* app_settings = nullptr, QObject* parent = nullptr);
 
         // Required overrides for QAbstractItemModel
         QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
@@ -39,4 +39,4 @@ namespace QmlApp
         QStringList m_keys;
 
     };
-}
+} // namespace QmlApp

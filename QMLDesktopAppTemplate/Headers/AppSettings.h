@@ -10,7 +10,7 @@ namespace QmlApp
 		Q_OBJECT
 
 	public:
-		AppSettings(QObject* parent = nullptr);
+		explicit AppSettings(QObject* parent = nullptr);
 		virtual ~AppSettings() = default;
 
 		[[nodiscard]] Q_INVOKABLE QVariant getValue(const QString& key, const QVariant& default_value = QVariant()) const;
@@ -22,4 +22,4 @@ namespace QmlApp
 		QSettings m_settings;
 
 	};
-}
+} // namespace QmlApp

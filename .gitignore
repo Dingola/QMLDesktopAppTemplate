@@ -37,3 +37,6 @@
 # Directories
 _build*/*
 install
+
+# Ignore compiled translation files
+*.qm

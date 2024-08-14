@@ -16,6 +16,7 @@ namespace QmlApp
     SettingsModel::SettingsModel(AppSettings* app_settings, QObject* parent)
         : QAbstractItemModel(parent), m_app_settings(app_settings)
     {
+        Q_ASSERT(app_settings != nullptr);
         m_keys = m_app_settings->getValue("keys", QStringList()).toStringList();
     }
 
@@ -185,4 +186,4 @@ namespace QmlApp
         m_app_settings->setValue("keys", m_keys);
         m_app_settings->saveToFile(file_path);
     }
-}
+} // namespace QmlApp

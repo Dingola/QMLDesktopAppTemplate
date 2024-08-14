@@ -72,10 +72,48 @@ else()
 	message(WARNING "The specified qt6 path '${qt6_path}' does not exist")
 endif()
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Qml Quick QuickControls2 Gui)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Qml Quick QuickControls2 Gui LinguistTools)
 qt_standard_project_setup()
 qt6_add_resources(RSCS resources.qrc)
 add_custom_target(gen_qrc DEPENDS ${RSCS})
+
+############################################
+### Translation Configuration            ###
+############################################
+
+set(TS_DIR ${PROJECT_NAME}/resources/Translations)
+set(TS_FILES ${TS_DIR}/app_de.ts ${TS_DIR}/app_en.ts)
+
+# Ensure the translations directory exists
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/${TS_DIR})
+
+# Define a custom target for updating translations
+add_custom_target(_update_translations
+    COMMAND ${qt6_path}/bin/lupdate ${CMAKE_SOURCE_DIR} -ts ${TS_FILES}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Updating translation files"
+)
+
+# Define a custom target for compiling translations
+add_custom_target(_compile_translations ALL
+    DEPENDS ${TS_FILES}
+    COMMAND ${qt6_path}/bin/lrelease ${TS_FILES}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Compiling translation files"
+)
+
+# Ensure the compiled .qm files are part of the build
+set(QM_FILES "")
+foreach(TS_FILE ${TS_FILES})
+    get_filename_component(QM_FILE ${TS_FILE} NAME_WE)
+    set(QM_FILES ${QM_FILES} ${CMAKE_SOURCE_DIR}/${TS_DIR}/${QM_FILE}.qm)
+endforeach()
+
+# Ensure the target directory exists before copying
+add_custom_command(TARGET _compile_translations POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/translations
+    COMMAND ${CMAKE_COMMAND} -E copy ${QM_FILES} $<TARGET_FILE_DIR:${PROJECT_NAME}>/translations
+)
 
 ############################################
 ### Setup Target Build Type              ###

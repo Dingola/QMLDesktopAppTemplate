@@ -75,4 +75,4 @@ namespace QmlApp
             file_settings.setValue(key, m_settings.value(key));
         }
     }
-}
+} // namespace QmlApp

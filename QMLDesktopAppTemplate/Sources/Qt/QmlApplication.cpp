@@ -18,11 +18,13 @@ namespace QmlApp
      * @param parent The parent object.
      */
     QmlApplication::QmlApplication(QObject* parent)
-        : QObject(parent), m_engine(), m_settings(), m_settings_model(&m_settings)
+        : QObject(parent), m_engine(), m_settings(), m_settings_model(&m_settings), m_translator()
     {
-        qmlRegisterType<AppSettings>("app.settings", 1, 0, "AppSettings");
-        qmlRegisterType<SettingsModel>("app.settings", 1, 0, "SettingsModel");
+        qmlRegisterType<AppSettings>("QmlApp.AppSettings", 1, 0, "AppSettings");
+        qmlRegisterType<SettingsModel>("QmlApp.Models.SettingsModel", 1, 0, "SettingsModel");
+        qmlRegisterType<Translator>("QmlApp.Services.Translator", 1, 0, "Translator");
         m_engine.rootContext()->setContextProperty(QStringLiteral("settings_model"), &m_settings_model);
+        m_engine.rootContext()->setContextProperty(QStringLiteral("translator"), &m_translator);
 
         // Load settings on startup
         m_settings_model.loadFromFile("settings.ini");
@@ -30,6 +32,10 @@ namespace QmlApp
         // Save settings on application exit
         connect(qApp, &QApplication::aboutToQuit, [this]() {
             m_settings_model.saveToFile("settings.ini");
+        });
+
+        connect(&m_translator, &Translator::languageChanged, this, [this]() {
+            m_engine.retranslate();
         });
     }
 
@@ -84,4 +90,4 @@ namespace QmlApp
 
         return result;
     }
-}
+} // namespace QmlApp
