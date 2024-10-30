@@ -5,16 +5,16 @@
 
 namespace QmlApp
 {
-	class AppSettings : public QObject
+	class Settings : public QObject
 	{
 		Q_OBJECT
 
 	public:
-		explicit AppSettings(QObject* parent = nullptr);
-		virtual ~AppSettings() = default;
+		explicit Settings(QObject* parent = nullptr);
+		virtual ~Settings() = default;
 
 		[[nodiscard]] Q_INVOKABLE QVariant getValue(const QString& key, const QVariant& default_value = QVariant()) const;
-		[[nodiscard]] Q_INVOKABLE QVariant getValue(const QString& group, 
+		[[nodiscard]] Q_INVOKABLE QVariant getValue(const QString& group,
 													const QString& key, const QVariant& default_value = QVariant());
 
 		Q_INVOKABLE void setValue(const QString& key, const QVariant& value);

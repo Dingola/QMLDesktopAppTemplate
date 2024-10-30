@@ -16,10 +16,10 @@ namespace QmlApp
 	 * @param app_settings The AppSettings object to use for retrieving and updating settings.
 	 * @param parent The parent object.
 	 */
-	SettingsModel::SettingsModel(AppSettings* app_settings, QObject* parent)
-		: m_app_settings(app_settings), m_sync_with_app_settings(true), QAbstractItemModel(parent)
+	SettingsModel::SettingsModel(Settings* settings, QObject* parent)
+		: m_settings(settings), m_sync_with_app_settings(true), QAbstractItemModel(parent)
 	{
-		Q_ASSERT(app_settings != nullptr);
+		Q_ASSERT(settings != nullptr);
 
 		m_root_node = new SettingsNode("Root", "");
 		load_settings_from_app_settings();
@@ -198,7 +198,7 @@ namespace QmlApp
 				QString group = groups.takeFirst();
 				QString key = (groups.size() > 1) ? groups.join("/") + "/" + node->get_key() : node->get_key();
 				QVariant value = node->get_value();
-				m_app_settings->setValue(group, key, value);
+				m_settings->setValue(group, key, value);
 			}
 
 			emit dataChanged(index, index, { role });
@@ -249,7 +249,7 @@ namespace QmlApp
 	 */
 	QVariant SettingsModel::getValue(const QString& key, const QString& group, const QVariant& default_value) const
 	{
-		return m_app_settings->getValue(group, key, default_value);
+		return m_settings->getValue(group, key, default_value);
 	}
 
 	/**
@@ -326,7 +326,7 @@ namespace QmlApp
 
 		if (m_sync_with_app_settings)
 		{
-			m_app_settings->setValue(group, key, value);
+			m_settings->setValue(group, key, value);
 		}
 	}
 
@@ -340,7 +340,7 @@ namespace QmlApp
 	void SettingsModel::loadFromFile(const QString& file_path)
 	{
 		reset();
-		m_app_settings->loadFromFile(file_path);
+		m_settings->loadFromFile(file_path);
 		load_settings_from_app_settings();
 	}
 
@@ -366,11 +366,11 @@ namespace QmlApp
 				QString group = groups.takeFirst();
 				QString key = (groups.size() > 1) ? groups.join("/") + "/" + node->get_key() : node->get_key();
 				QVariant value = node->get_value();
-				m_app_settings->setValue(group, key, value); // todo: Alternatively create a new AppSettings object to save the settings directly ( avoids saving the settings twice )
+				m_settings->setValue(group, key, value); // todo: Alternatively create a new AppSettings object to save the settings directly ( avoids saving the settings twice )
 			}
 		}
 
-		m_app_settings->saveToFile(file_path);
+		m_settings->saveToFile(file_path);
 	}
 
 	/**
@@ -378,14 +378,14 @@ namespace QmlApp
 	 */
 	void SettingsModel::load_settings_from_app_settings()
 	{
-		QStringList all_keys = m_app_settings->allKeys();
+		QStringList all_keys = m_settings->allKeys();
 
 		for (const QString key : all_keys)
 		{
 			QStringList key_parts = key.split('/');
 			QString group = key_parts.takeFirst();
 			QString key_name = key_parts.join('/');
-			QVariant value = m_app_settings->getValue(group, key_name);
+			QVariant value = m_settings->getValue(group, key_name);
 			setValue(key_name, value, group);
 		}
 	}

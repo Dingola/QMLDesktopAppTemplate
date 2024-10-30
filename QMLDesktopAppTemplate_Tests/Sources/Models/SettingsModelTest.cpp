@@ -13,20 +13,20 @@ using namespace QmlApp;
 class SettingsModelTest : public ::testing::Test
 {
 public:
-    AppSettings* m_app_settings = nullptr;
+    Settings* m_settings = nullptr;
     SettingsModel* m_settings_model = nullptr;
 
 protected:
     void SetUp() override
     {
-        m_app_settings = new AppSettings();
-        m_settings_model = new SettingsModel(m_app_settings);
+        m_settings = new Settings();
+        m_settings_model = new SettingsModel(m_settings);
     }
 
     void TearDown() override
     {
-        m_app_settings->clear();
-        delete m_app_settings;
+        m_settings->clear();
+        delete m_settings;
         delete m_settings_model;
     }
 };
@@ -331,8 +331,8 @@ TEST_F(SettingsModelTest, SaveToFileTest)
 
     m_settings_model->saveToFile(file_path);
 
-    AppSettings result_app_settings = AppSettings();
-    SettingsModel result_settings_model = SettingsModel(&result_app_settings);
+    Settings result_settings = Settings();
+    SettingsModel result_settings_model = SettingsModel(&result_settings);
     result_settings_model.loadFromFile(file_path);
 
     QVariant result_1 = result_settings_model.getValue("key1", "General");

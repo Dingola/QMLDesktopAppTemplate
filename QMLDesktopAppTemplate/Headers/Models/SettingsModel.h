@@ -3,7 +3,7 @@
 #include <QAbstractItemModel>
 #include <QVariant>
 
-#include "AppSettings.h"
+#include "Services/Settings.h"
 #include "SettingsNode.h"
 
 namespace QmlApp
@@ -20,7 +20,7 @@ namespace QmlApp
 		Q_OBJECT
 
 	public:
-		explicit SettingsModel(AppSettings* app_settings = nullptr, QObject* parent = nullptr);
+		explicit SettingsModel(Settings* settings = nullptr, QObject* parent = nullptr);
 
 		// Required overrides for QAbstractItemModel
 		QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
@@ -51,7 +51,7 @@ namespace QmlApp
 		void reset();
 
 	private:
-		AppSettings* m_app_settings;
+		Settings* m_settings;
 		bool m_sync_with_app_settings;
 		SettingsNode* m_root_node;
 

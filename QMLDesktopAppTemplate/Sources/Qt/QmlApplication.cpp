@@ -20,8 +20,8 @@ namespace QmlApp
     QmlApplication::QmlApplication(QObject* parent)
         : QObject(parent), m_engine(), m_settings(), m_settings_model(&m_settings), m_translator()
     {
-        qmlRegisterType<AppSettings>("QmlApp.AppSettings", 1, 0, "AppSettings");
         qmlRegisterType<SettingsModel>("QmlApp.Models.SettingsModel", 1, 0, "SettingsModel");
+        qmlRegisterType<Settings>("QmlApp.Services.Settings", 1, 0, "Settings");
         qmlRegisterType<Translator>("QmlApp.Services.Translator", 1, 0, "Translator");
         m_engine.rootContext()->setContextProperty(QStringLiteral("settings_model"), &m_settings_model);
         m_engine.rootContext()->setContextProperty(QStringLiteral("translator"), &m_translator);

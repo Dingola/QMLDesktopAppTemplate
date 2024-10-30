@@ -6,190 +6,190 @@
 #include <QFile>
 #include <QTextStream>
 
-#include "AppSettings.h"
+#include "Services/Settings.h"
 
 using namespace QmlApp;
 
-class AppSettingsTest : public ::testing::Test
+class SettingsTest : public ::testing::Test
 {
 public:
-    AppSettings* m_app_settings = nullptr;
+    Settings* m_settings = nullptr;
 
 protected:
     void SetUp() override
     {
-        m_app_settings = new AppSettings();
+        m_settings = new Settings();
     }
 
     void TearDown() override
     {
-        m_app_settings->clear();
-        delete m_app_settings;
+        m_settings->clear();
+        delete m_settings;
     }
 };
 
 // Test case for getValue() method
-TEST_F(AppSettingsTest, GetValueTest)
+TEST_F(SettingsTest, GetValueTest)
 {
     // Test when key exists
     QString key = "key1";
     QVariant value = "default value";
-    m_app_settings->setValue(key, value);
-    QVariant result_value = m_app_settings->getValue(key);
+    m_settings->setValue(key, value);
+    QVariant result_value = m_settings->getValue(key);
     EXPECT_EQ(result_value, value);
 
     // Test when key exists in group
     QString group = "General";
     key = "key2";
-    m_app_settings->setValue(group, key, value);
-    result_value = m_app_settings->getValue(group, key);
+    m_settings->setValue(group, key, value);
+    result_value = m_settings->getValue(group, key);
     EXPECT_EQ(result_value, value);
 
     // Test when key does not exist
     key = "key3";
-    result_value = m_app_settings->getValue(key);
+    result_value = m_settings->getValue(key);
     EXPECT_EQ(result_value, QVariant());
 
     // Test when key does not exist in group
     key = "key4";
-    result_value = m_app_settings->getValue(group, key);
+    result_value = m_settings->getValue(group, key);
     EXPECT_EQ(result_value, QVariant());
 
     // Test when key does not exist and default value is provided
     key = "key5";
     QVariant default_value = "test default value";
-    result_value = m_app_settings->getValue(key, default_value);
+    result_value = m_settings->getValue(key, default_value);
     EXPECT_EQ(result_value, default_value);
 
     // Test when key does not exist in group and default value is provided
     key = "key6";
     QVariant default_value_2 = "test default value 2";
-    result_value = m_app_settings->getValue(group, key, default_value);
+    result_value = m_settings->getValue(group, key, default_value);
     EXPECT_EQ(result_value, default_value);
 }
 
 // Test case for setValue() method
-TEST_F(AppSettingsTest, SetValueTest)
+TEST_F(SettingsTest, SetValueTest)
 {
     // Test when key does not exist
     QString key = "new key";
     QVariant value = "new value";
-    m_app_settings->setValue(key, value);
-    QStringList keys = m_app_settings->allKeys();
+    m_settings->setValue(key, value);
+    QStringList keys = m_settings->allKeys();
     EXPECT_TRUE(keys.contains(key));
 
     // Test when key does not exist in group
     QString group = "General";
     QString key_2 = "new key 2";
     value = "new value 2";
-    m_app_settings->setValue(group, key_2, value);
-    keys = m_app_settings->childKeys(group);
+    m_settings->setValue(group, key_2, value);
+    keys = m_settings->childKeys(group);
     EXPECT_TRUE(keys.contains(key_2));
 
     // Test when same key exists
     value = "updated value";
-    m_app_settings->setValue(key, value);
-    QVariant updated_value = m_app_settings->getValue(key);
+    m_settings->setValue(key, value);
+    QVariant updated_value = m_settings->getValue(key);
     EXPECT_EQ(updated_value, value);
 
     // Test when same key exists in group
     value = "updated value 2";
-    m_app_settings->setValue(group, key_2, value);
-    updated_value = m_app_settings->getValue(group, key_2);
+    m_settings->setValue(group, key_2, value);
+    updated_value = m_settings->getValue(group, key_2);
     EXPECT_EQ(updated_value, value);
 }
 
 // Test case for childGroups() method
-TEST_F(AppSettingsTest, ChildGroupsTest)
+TEST_F(SettingsTest, ChildGroupsTest)
 {
     // Test when no child groups exist
-    QStringList groups = m_app_settings->childGroups();
+    QStringList groups = m_settings->childGroups();
     EXPECT_TRUE(groups.isEmpty());
 
     // Test when child groups exist
     QString group = "TestGroup";
     QString key = "new key";
     QVariant value = "new value";
-    m_app_settings->setValue(group, key, value);
-    groups = m_app_settings->childGroups();
+    m_settings->setValue(group, key, value);
+    groups = m_settings->childGroups();
     EXPECT_TRUE(groups.contains(group));
 }
 
 // Test case for childKeys() method
-TEST_F(AppSettingsTest, ChildKeysTest)
+TEST_F(SettingsTest, ChildKeysTest)
 {
     // Test when no child keys exist
     QString group = "General";
-    QStringList keys = m_app_settings->childKeys(group);
+    QStringList keys = m_settings->childKeys(group);
     EXPECT_TRUE(keys.isEmpty());
 
     // Test when child keys exist
     QString key = "TestKey";
     QVariant value = "TestValue";
-    m_app_settings->setValue(group, key, value);
-    keys = m_app_settings->childKeys(group);
+    m_settings->setValue(group, key, value);
+    keys = m_settings->childKeys(group);
     EXPECT_TRUE(keys.contains(key));
 }
 
 // Test case for allKeys() method
-TEST_F(AppSettingsTest, AllKeysTest)
+TEST_F(SettingsTest, AllKeysTest)
 {
     // Test when no keys exist
-    QStringList keys = m_app_settings->allKeys();
+    QStringList keys = m_settings->allKeys();
     EXPECT_TRUE(keys.isEmpty());
 
     // Test when keys exist
     QString key1 = "key1";
     QVariant value1 = "value1";
-    m_app_settings->setValue(key1, value1);
+    m_settings->setValue(key1, value1);
 
     QString key2 = "key2";
     QVariant value2 = "value2";
-    m_app_settings->setValue(key2, value2);
+    m_settings->setValue(key2, value2);
 
-    keys = m_app_settings->allKeys();
+    keys = m_settings->allKeys();
     EXPECT_TRUE(keys.contains(key1));
     EXPECT_TRUE(keys.contains(key2));
 }
 
 // Test case for contains() method
-TEST_F(AppSettingsTest, ContainsTest)
+TEST_F(SettingsTest, ContainsTest)
 {
     // Test when key exists
     QString key = "key1";
     QVariant value = "default value";
-    m_app_settings->setValue(key, value);
-    bool exists = m_app_settings->contains(key);
+    m_settings->setValue(key, value);
+    bool exists = m_settings->contains(key);
     EXPECT_TRUE(exists);
 
     // Test when key and group exists
     QString group = "General";
     key = "key2";
     value = "default value 2";
-    m_app_settings->setValue(group, key, value);
-    exists = m_app_settings->contains(group, key);
+    m_settings->setValue(group, key, value);
+    exists = m_settings->contains(group, key);
     EXPECT_TRUE(exists);
 
     // Test when key does not exist
     key = "key3";
-    exists = m_app_settings->contains(group, key);
+    exists = m_settings->contains(group, key);
     EXPECT_FALSE(exists);
 }
 
 // Test case for clear() method
-TEST_F(AppSettingsTest, ClearTest)
+TEST_F(SettingsTest, ClearTest)
 {
     // Test when settings are not empty
     QString key = "key1";
     QVariant value = "default value";
-    m_app_settings->setValue(key, value);
-    m_app_settings->clear();
-    QStringList keys = m_app_settings->childKeys("General");
+    m_settings->setValue(key, value);
+    m_settings->clear();
+    QStringList keys = m_settings->childKeys("General");
     EXPECT_TRUE(keys.isEmpty());
 }
 
 // Test case for loadFromFile() method
-TEST_F(AppSettingsTest, LoadFromFileTest)
+TEST_F(SettingsTest, LoadFromFileTest)
 {
     QString exe_path = QCoreApplication::applicationDirPath();
     QString file_path = exe_path + "/appsettingstest_load_settings.ini";
@@ -210,13 +210,13 @@ TEST_F(AppSettingsTest, LoadFromFileTest)
         file.close();
     }
 
-    m_app_settings->loadFromFile(file_path);
+    m_settings->loadFromFile(file_path);
 
-    QVariant result_1 = m_app_settings->getValue("key1");
-    QVariant result_2 = m_app_settings->getValue("key2");
-    QVariant result_3 = m_app_settings->getValue("General", "key3");
-    QVariant result_4 = m_app_settings->getValue("TestGroup", "Group/key4");
-    QVariant result_5 = m_app_settings->getValue("TestGroup_2", "Group_2/Group/key5");
+    QVariant result_1 = m_settings->getValue("key1");
+    QVariant result_2 = m_settings->getValue("key2");
+    QVariant result_3 = m_settings->getValue("General", "key3");
+    QVariant result_4 = m_settings->getValue("TestGroup", "Group/key4");
+    QVariant result_5 = m_settings->getValue("TestGroup_2", "Group_2/Group/key5");
     EXPECT_EQ(result_1, QVariant("value1"));
     EXPECT_EQ(result_2, QVariant("value2"));
     EXPECT_EQ(result_3, QVariant("value3"));
@@ -227,19 +227,19 @@ TEST_F(AppSettingsTest, LoadFromFileTest)
 }
 
 // Test case for saveToFile() method
-TEST_F(AppSettingsTest, SaveToFileTest)
+TEST_F(SettingsTest, SaveToFileTest)
 {
     QString exe_path = QCoreApplication::applicationDirPath();
     QString file_path = exe_path + "/appsettingstest_save_settings.ini";
-    m_app_settings->setValue("key1", "value1");
-    m_app_settings->setValue("key2", "value2");
-    m_app_settings->setValue("General", "key3", "value3");
-    m_app_settings->setValue("TestGroup", "Group/key4", "value4");
-    m_app_settings->setValue("TestGroup_2", "Group_2/Group/key5", "value5");
+    m_settings->setValue("key1", "value1");
+    m_settings->setValue("key2", "value2");
+    m_settings->setValue("General", "key3", "value3");
+    m_settings->setValue("TestGroup", "Group/key4", "value4");
+    m_settings->setValue("TestGroup_2", "Group_2/Group/key5", "value5");
 
-    m_app_settings->saveToFile(file_path);
+    m_settings->saveToFile(file_path);
 
-    AppSettings result_app_settings = AppSettings();
+    Settings result_app_settings = Settings();
     result_app_settings.loadFromFile(file_path);
 
     QVariant result_1 = result_app_settings.getValue("key1");

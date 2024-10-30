@@ -1,28 +1,28 @@
 /**
- * @file AppSettings.cpp
- * @brief This file contains the implementation of the AppSettings class.
+ * @file Settings.cpp
+ * @brief This file contains the implementation of the Settings class.
  */
 
-#include "AppSettings.h"
+#include "Services/Settings.h"
 
 #include <QCoreApplication>
 
 namespace QmlApp
 {
 	/**
-	 * @brief Constructs an AppSettings object with the given parent.
+	 * @brief Constructs an Settings object with the given parent.
 	 *
-	 * This constructor initializes the AppSettings object with the parent object and
+	 * This constructor initializes the Settings object with the parent object and
 	 * sets up the QSettings object to use the organization name and application name
 	 * for storing settings in the registry. The settings can be cleared using the
 	 * `clear()` method.
 	 *
 	 * @param parent The parent object.
 	 */
-	AppSettings::AppSettings(QObject* parent)
+	Settings::Settings(QObject* parent)
 		: m_settings(QCoreApplication::organizationName(), QCoreApplication::applicationName()), QObject(parent)
 	{
-		qInfo() << "AppSettings initialized with organization name:" << QCoreApplication::organizationName()
+		qInfo() << "Settings initialized with organization name:" << QCoreApplication::organizationName()
 			<< "and application name:" << QCoreApplication::applicationName()
 			<< ". Session Settings will be saved to: " << m_settings.fileName();
 	}
@@ -34,7 +34,7 @@ namespace QmlApp
 	 * @param default_value The default value to return if the key does not exist.
 	 * @return The value associated with the key, or the default value if the key does not exist.
 	 */
-	QVariant AppSettings::getValue(const QString& key, const QVariant& default_value) const
+	QVariant Settings::getValue(const QString& key, const QVariant& default_value) const
 	{
 		return m_settings.value(key, default_value);
 	}
@@ -47,7 +47,7 @@ namespace QmlApp
 	 * @param default_value The default value to return if the key does not exist.
 	 * @return The value associated with the key, or the default value if the key does not exist.
 	 */
-	QVariant AppSettings::getValue(const QString& group, const QString& key, const QVariant& default_value)
+	QVariant Settings::getValue(const QString& group, const QString& key, const QVariant& default_value)
 	{
 		m_settings.beginGroup(group);
 		QVariant value = m_settings.value(key, default_value);
@@ -61,7 +61,7 @@ namespace QmlApp
 	 * @param key The key of the value to set.
 	 * @param value The value to set.
 	 */
-	void AppSettings::setValue(const QString& key, const QVariant& value)
+	void Settings::setValue(const QString& key, const QVariant& value)
 	{
 		m_settings.setValue(key, value);
 	}
@@ -73,7 +73,7 @@ namespace QmlApp
 	 * @param key The key of the value to set.
 	 * @param value The value to set.
 	 */
-	void AppSettings::setValue(const QString& group, const QString& key, const QVariant& value)
+	void Settings::setValue(const QString& group, const QString& key, const QVariant& value)
 	{
 		m_settings.beginGroup(group);
 		m_settings.setValue(key, value);
@@ -85,7 +85,7 @@ namespace QmlApp
 	 *
 	 * @return A list of child groups in the settings.
 	 */
-	QStringList AppSettings::childGroups() const
+	QStringList Settings::childGroups() const
 	{
 		return m_settings.childGroups();
 	}
@@ -96,7 +96,7 @@ namespace QmlApp
 	 * @param group The group to retrieve the child groups from.
 	 * @return A list of child groups in the specified group.
 	 */
-	QStringList AppSettings::childGroups(const QString& group)
+	QStringList Settings::childGroups(const QString& group)
 	{
 		m_settings.beginGroup(group);
 		QStringList groups = m_settings.childGroups();
@@ -110,7 +110,7 @@ namespace QmlApp
 	 * @param group The group to retrieve the child keys from.
 	 * @return A list of child keys in the specified group.
 	 */
-	QStringList AppSettings::childKeys(const QString& group)
+	QStringList Settings::childKeys(const QString& group)
 	{
 		m_settings.beginGroup(group);
 		QStringList keys = m_settings.childKeys();
@@ -123,7 +123,7 @@ namespace QmlApp
 	 *
 	 * @return A list of all keys in the settings.
 	 */
-	QStringList AppSettings::allKeys() const
+	QStringList Settings::allKeys() const
 	{
 		return m_settings.allKeys();
 	}
@@ -134,7 +134,7 @@ namespace QmlApp
 	 * @param key The key to check.
 	 * @return True if the key exists, false otherwise.
 	 */
-	bool AppSettings::contains(const QString& key)
+	bool Settings::contains(const QString& key)
 	{
 		return m_settings.contains(key);
 	}
@@ -146,7 +146,7 @@ namespace QmlApp
 	 * @param key The key to check.
 	 * @return True if the key exists, false otherwise.
 	 */
-	bool AppSettings::contains(const QString& group, const QString& key)
+	bool Settings::contains(const QString& group, const QString& key)
 	{
 		m_settings.beginGroup(group);
 		bool exists = m_settings.contains(key);
@@ -162,7 +162,7 @@ namespace QmlApp
 	 * @param file_path The file path of the settings file to load.
 	 * @param format The format of the settings file.
 	 */
-	void AppSettings::loadFromFile(const QString& file_path, QSettings::Format format)
+	void Settings::loadFromFile(const QString& file_path, QSettings::Format format)
 	{
 		qInfo() << "Loading settings from file: " << file_path;
 		QSettings file_settings(file_path, format);
@@ -180,7 +180,7 @@ namespace QmlApp
 	 * @param file_path The file path of the settings file to save.
 	 * @param format The format of the settings file.
 	 */
-	void AppSettings::saveToFile(const QString& file_path, QSettings::Format format)
+	void Settings::saveToFile(const QString& file_path, QSettings::Format format)
 	{
 		qInfo() << "Saving settings to file:" << file_path;
 		QSettings file_settings(file_path, format);
@@ -198,7 +198,7 @@ namespace QmlApp
 	 * @param source The source QSettings object.
 	 * @param destination The destination QSettings object.
 	 */
-	void AppSettings::copy_settings(QSettings& source, QSettings& destination)
+	void Settings::copy_settings(QSettings& source, QSettings& destination)
 	{
 		for (const auto& child_key : source.childKeys())
 		{
@@ -231,7 +231,7 @@ namespace QmlApp
 	 *
 	 * This function clears the current session settings.
 	 */
-	void AppSettings::clear()
+	void Settings::clear()
 	{
 		qInfo() << "Clearing current session settings";
 		m_settings.clear();

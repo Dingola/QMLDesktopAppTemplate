@@ -3,8 +3,8 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
-#include "AppSettings.h"
 #include "Models/SettingsModel.h"
+#include "Services/Settings.h"
 #include "Services/Translator.h"
 
 namespace QmlApp
@@ -24,7 +24,7 @@ namespace QmlApp
 
     private:
         QQmlApplicationEngine m_engine;
-        AppSettings m_settings;
+        Settings m_settings;
         SettingsModel m_settings_model;
         Translator m_translator;
 
