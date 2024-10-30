@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     app.setApplicationName(QStringLiteral("QmlApp"));
-    app.setOrganizationName(QStringLiteral("AdrianHelbig"));
+    app.setOrganizationName(QStringLiteral("QmlDesktopAppTemplate"));
     app.setOrganizationDomain(QStringLiteral("AdrianHelbig.de"));
 
     QmlApplication qml_app;

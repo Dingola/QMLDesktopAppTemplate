@@ -1,42 +1,59 @@
 #pragma once
 
 #include <QAbstractItemModel>
+#include <QVariant>
 
 #include "AppSettings.h"
+#include "SettingsNode.h"
 
 namespace QmlApp
 {
-    class SettingsModel : public QAbstractItemModel
-    {
-        Q_OBJECT
-        Q_PROPERTY(QStringList keys READ keys NOTIFY keysChanged)
+	enum SettingsDataRole
+	{
+		GroupRole = Qt::UserRole + 1,
+		KeyRole,
+		ValueRole
+	};
 
-    public:
-        explicit SettingsModel(AppSettings* app_settings = nullptr, QObject* parent = nullptr);
+	class SettingsModel : public QAbstractItemModel
+	{
+		Q_OBJECT
 
-        // Required overrides for QAbstractItemModel
-        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-        QModelIndex parent(const QModelIndex& index) const override;
-        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-        int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-        QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-        bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
-        Qt::ItemFlags flags(const QModelIndex& index) const override;
+	public:
+		explicit SettingsModel(AppSettings* app_settings = nullptr, QObject* parent = nullptr);
 
-        // Custom methods to interact with settings
-        [[nodiscard]] Q_INVOKABLE QVariant getValue(const QString& key, const QVariant& default_value = QVariant()) const;
-        Q_INVOKABLE void setValue(const QString& key, const QVariant& value);
-        Q_INVOKABLE void loadFromFile(const QString& file_path);
-        Q_INVOKABLE void saveToFile(const QString& file_path);
+		// Required overrides for QAbstractItemModel
+		QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+		QModelIndex parent(const QModelIndex& index) const override;
+		int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+		int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+		QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+		bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+		Qt::ItemFlags flags(const QModelIndex& index) const override;
+		QHash<int, QByteArray> roleNames() const override;
 
-        [[nodiscard]] QStringList keys() const { return m_keys; }
+		// Custom methods to interact with settings
+		[[nodiscard]] Q_INVOKABLE QVariant getValue(const QString& key,
+													const QString& group = "General",
+													const QVariant& default_value = QVariant()) const;
+		Q_INVOKABLE void setValue(const QString& key, const QVariant& value, const QString& group = "General");
 
-    signals:
-        void keysChanged();
+		Q_INVOKABLE void loadFromFile(const QString& file_path);
+		Q_INVOKABLE void saveToFile(const QString& file_path);
 
-    private:
-        AppSettings* m_app_settings;
-        QStringList m_keys;
+	private:
+		void load_settings_from_app_settings();
 
-    };
+		SettingsNode* create_node(const QString& group, const QString& key, const QVariant& value, SettingsNode* parent = nullptr);
+		[[nodiscard]] QList<SettingsNode*> get_leaf_nodes() const;
+		void collect_leaf_nodes(SettingsNode* node, QList<SettingsNode*>& leaf_nodes) const;
+
+		void reset();
+
+	private:
+		AppSettings* m_app_settings;
+		bool m_sync_with_app_settings;
+		SettingsNode* m_root_node;
+
+	};
 } // namespace QmlApp

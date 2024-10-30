@@ -61,7 +61,7 @@ include_directories(Headers Sources)
 ############################################
 
 if ("$ENV{qt6_path}" STREQUAL "")
-	set(qt6_path "E:\\Qt6\\6.3.1\\msvc2019_64\\")
+	set(qt6_path "E:\\Qt\\6.8.0\\msvc2022_64\\")
 else()
 	set(qt6_path "$ENV{qt6_path}")
 endif()
