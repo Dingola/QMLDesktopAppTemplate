@@ -26,6 +26,14 @@ namespace QmlApp
 	}
 
 	/**
+	 * @brief Destroys the SettingsModel object and frees any allocated memory.
+	 */
+	SettingsModel::~SettingsModel()
+	{
+		delete m_root_node;
+	}
+
+	/**
 	 * @brief Returns the index of the item in the model with the specified row, column, and parent index.
 	 *
 	 * @param row The row of the item.
@@ -146,28 +154,30 @@ namespace QmlApp
 		{
 			result = QVariant();
 		}
-
-		SettingsNode* node = static_cast<SettingsNode*>(index.internalPointer());
-
-		if (role == Qt::DisplayRole || role == Qt::EditRole)
-		{
-			result = node->data(index.column());
-		}
 		else
 		{
-			switch (role)
+			SettingsNode* node = static_cast<SettingsNode*>(index.internalPointer());
+
+			if (role == Qt::DisplayRole || role == Qt::EditRole)
 			{
-				case GroupRole:
-					result = node->get_group();
-					break;
-				case KeyRole:
-					result = node->get_key();
-					break;
-				case ValueRole:
-					result = node->get_value();
-					break;
-				default:
-					break;
+				result = node->data(index.column());
+			}
+			else
+			{
+				switch (role)
+				{
+					case GroupRole:
+						result = node->get_group();
+						break;
+					case KeyRole:
+						result = node->get_key();
+						break;
+					case ValueRole:
+						result = node->get_value();
+						break;
+					default:
+						break;
+				}
 			}
 		}
 
@@ -289,7 +299,7 @@ namespace QmlApp
 			}
 			else
 			{
-				key_node_model_index = index(key_node->row(), 2, createIndex(group_node->row(), 0, group_node));
+				key_node_model_index = index(key_node->row(), key_node->column_count(), createIndex(group_node->row(), 0, group_node));
 				setData(key_node_model_index, value, Qt::EditRole);
 			}
 		}
@@ -319,7 +329,7 @@ namespace QmlApp
 			}
 			else
 			{
-				key_node_model_index = index(key_node->row(), 2, createIndex(group_node->row(), 0, group_node));
+				key_node_model_index = index(key_node->row(), key_node->column_count(), createIndex(group_node->row(), 0, group_node));
 				setData(key_node_model_index, value, Qt::EditRole);
 			}
 		}
@@ -355,7 +365,7 @@ namespace QmlApp
 	{
 		if (!m_sync_with_app_settings)
 		{
-			// Sync the settings with the AppSettings object before saving
+			// Sync the settings with the Settings object before saving
 			QList<SettingsNode*> leaf_nodes = get_leaf_nodes();
 
 			for (const SettingsNode* node : leaf_nodes)
@@ -366,7 +376,7 @@ namespace QmlApp
 				QString group = groups.takeFirst();
 				QString key = (groups.size() > 1) ? groups.join("/") + "/" + node->get_key() : node->get_key();
 				QVariant value = node->get_value();
-				m_settings->setValue(group, key, value); // todo: Alternatively create a new AppSettings object to save the settings directly ( avoids saving the settings twice )
+				m_settings->setValue(group, key, value); // todo: Alternatively create a new Settings object to save the settings directly ( avoids saving the settings twice )
 			}
 		}
 
@@ -374,7 +384,7 @@ namespace QmlApp
 	}
 
 	/**
-	 * @brief Loads the settings from the AppSettings object.
+	 * @brief Loads the settings from the Settings object.
 	 */
 	void SettingsModel::load_settings_from_app_settings()
 	{

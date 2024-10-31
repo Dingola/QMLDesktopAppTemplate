@@ -21,6 +21,7 @@ namespace QmlApp
 
 	public:
 		explicit SettingsModel(Settings* settings = nullptr, QObject* parent = nullptr);
+		~SettingsModel() override;
 
 		// Required overrides for QAbstractItemModel
 		QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
