@@ -35,7 +35,6 @@ set(THIRD_PARTY_INCLUDE_DIR ${DEFAULT_THIRD_PARTY_PATH} CACHE PATH "Third Party 
 
 # Global properties for project organization
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${main_project_name})
 
 # Include current directory
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -59,4 +58,10 @@ add_subdirectory(${main_project_name})
 # Add the test project conditionally
 if (${main_project_name}_BUILD_TEST_PROJECT)
   add_subdirectory(${main_project_name}_Tests)
+  set(startup_project ${main_project_name}_Tests)
+else()
+  set(startup_project ${main_project_name})
 endif()
+
+# Set the startup project
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${startup_project})

@@ -1,0 +1,85 @@
+name: Builds Desktop Cross-Platform
+
+#------------------------------------------------
+# Workflow Triggers
+#------------------------------------------------
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+
+#------------------------------------------------
+# Environment Variables
+#------------------------------------------------
+env:
+    PROJECT_NAME: ${{github.event.repository.name}}
+    BUILD_TYPE: Release
+    BUILD_TARGET_TYPE: static_library
+    BUILD_TEST_PROJECT: true
+    THIRD_PARTY_INCLUDE_DIR: ${{github.workspace}}/ThirdPartyDir
+    QT_VERSION: "6.8.0"
+
+#------------------------------------------------
+# Workflow jobs
+#------------------------------------------------
+jobs:
+
+    #------------------------------------------------
+    # Windows build
+    #------------------------------------------------
+    build:
+        name: Windows Latest MSVC
+        runs-on: windows-latest
+
+        steps:
+            # Checkout repository (and submodules)
+            - name: Checkout repository (and submodules)
+              uses: actions/checkout@v2
+              with:
+                submodules: recursive
+
+            # Prepare
+            - name: Prepare
+              run: mkdir ${{env.THIRD_PARTY_INCLUDE_DIR}}
+
+            # Restore Cache
+            - name: Restore Cache
+              uses: actions/cache@v4
+              with:
+                path: ${{env.THIRD_PARTY_INCLUDE_DIR}}
+                key: ${{runner.os}}-cache-${{github.sha}}
+                restore-keys: |
+                    ${{runner.os}}-cache-
+                    ${{runner.os}}-
+
+            - name: Install Qt
+              uses: jurplel/install-qt-action@v3
+              with:
+                aqtversion: '==3.1.*'
+                version: '6.8.0'
+                host: 'windows'
+                target: 'desktop'
+                arch: 'win64_msvc2022_64'
+
+            # Configure CMake
+            - name: Configure CMake
+              run: |
+                  cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TARGET_TYPE:STRING=${{env.BUILD_TARGET_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TEST_PROJECT:BOOL=${{env.BUILD_TEST_PROJECT}} -D THIRD_PARTY_INCLUDE_DIR:PATH=${{env.THIRD_PARTY_INCLUDE_DIR}}
+
+            # Cache
+            - name: Cache
+              uses: actions/cache@v4
+              with:
+                path: ${{env.THIRD_PARTY_INCLUDE_DIR}}
+                key: ${{runner.os}}-cache-${{github.sha}}
+
+            # Build
+            - name: Build
+              run: |
+                cd ${{github.workspace}}/build
+                cmake --build . --config ${{env.BUILD_TYPE}}
+
+            # Tests
+            - name: Tests
+              run: ${{github.workspace}}/build/${{env.PROJECT_NAME}}_Tests\${{env.BUILD_TYPE}}\${{env.PROJECT_NAME}}_Tests.exe

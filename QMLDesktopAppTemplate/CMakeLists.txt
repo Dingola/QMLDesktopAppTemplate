@@ -19,7 +19,6 @@ include(${CMAKE_SOURCE_DIR}/CMake/BuildThirdPartyProject.cmake)
 
 # Global properties for project organization
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
 # Include current directory
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -95,7 +94,7 @@ add_custom_target(_update_translations
 )
 
 # Define a custom target for compiling translations
-add_custom_target(_compile_translations ALL
+add_custom_target(_compile_translations
     DEPENDS ${TS_FILES}
     COMMAND ${qt6_path}/bin/lrelease ${TS_FILES}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
