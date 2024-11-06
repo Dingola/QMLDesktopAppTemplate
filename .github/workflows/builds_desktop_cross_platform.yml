@@ -28,7 +28,7 @@ jobs:
     #------------------------------------------------
     # Windows build
     #------------------------------------------------
-    build:
+    build-windows:
         name: Windows Latest MSVC
         runs-on: windows-latest
 
@@ -57,7 +57,7 @@ jobs:
               uses: jurplel/install-qt-action@v3
               with:
                 aqtversion: '==3.1.*'
-                version: '6.8.0'
+                version: ${{env.QT_VERSION}}
                 host: 'windows'
                 target: 'desktop'
                 arch: 'win64_msvc2022_64'
@@ -65,7 +65,7 @@ jobs:
             # Configure CMake
             - name: Configure CMake
               run: |
-                  cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TARGET_TYPE:STRING=${{env.BUILD_TARGET_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TEST_PROJECT:BOOL=${{env.BUILD_TEST_PROJECT}} -D THIRD_PARTY_INCLUDE_DIR:PATH=${{env.THIRD_PARTY_INCLUDE_DIR}}
+                cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TARGET_TYPE:STRING=${{env.BUILD_TARGET_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TEST_PROJECT:BOOL=${{env.BUILD_TEST_PROJECT}} -D THIRD_PARTY_INCLUDE_DIR:PATH=${{env.THIRD_PARTY_INCLUDE_DIR}}
 
             # Cache
             - name: Cache
@@ -83,3 +83,74 @@ jobs:
             # Tests
             - name: Tests
               run: ${{github.workspace}}/build/${{env.PROJECT_NAME}}_Tests\${{env.BUILD_TYPE}}\${{env.PROJECT_NAME}}_Tests.exe
+
+    #------------------------------------------------
+    # Linux build
+    #------------------------------------------------
+    build-linux:
+        name: Ubuntu Latest
+        runs-on: ubuntu-latest
+
+        steps:
+            # Checkout repository (and submodules)
+            - name: Checkout repository (and submodules)
+              uses: actions/checkout@v2
+              with:
+                submodules: recursive
+
+            # Prepare
+            - name: Prepare
+              run: mkdir -p ${{env.THIRD_PARTY_INCLUDE_DIR}}
+
+            # Restore Cache
+            - name: Restore Cache
+              uses: actions/cache@v4
+              with:
+                path: ${{env.THIRD_PARTY_INCLUDE_DIR}}
+                key: ${{runner.os}}-cache-${{github.sha}}
+                restore-keys: |
+                    ${{runner.os}}-cache-
+                    ${{runner.os}}-
+
+            # Instal Qt
+            - name: Install Qt
+              uses: jurplel/install-qt-action@v4
+              with:
+                aqtversion: '==3.1.*'
+                version: ${{env.QT_VERSION}}
+                host: 'linux'
+                target: 'desktop'
+                arch: 'linux_gcc_64'
+
+            # Install dependencies
+            - name: Install dependencies
+              run: |
+                sudo apt-get update && sudo apt-get install -y build-essential libpthread-stubs0-dev;
+                sudo apt-get install libgl1-mesa-dev;
+
+            # Set qt6_path environment variable
+            - name: Set qt6_path
+              run: echo "qt6_path=${{github.workspace}}/../Qt/${{env.QT_VERSION}}/gcc_64" >> $GITHUB_ENV
+
+            # Configure CMake
+            - name: Configure CMake
+              run: |
+                cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TARGET_TYPE:STRING=${{env.BUILD_TARGET_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TEST_PROJECT:BOOL=${{env.BUILD_TEST_PROJECT}} -D THIRD_PARTY_INCLUDE_DIR:PATH=${{env.THIRD_PARTY_INCLUDE_DIR}}
+
+            # Cache
+            - name: Cache
+              uses: actions/cache@v4
+              with:
+                path: ${{env.THIRD_PARTY_INCLUDE_DIR}}
+                key: ${{runner.os}}-cache-${{github.sha}}
+
+            # Build
+            - name: Build
+              run: |
+                cd ${{github.workspace}}/build
+                cmake --build . --config ${{env.BUILD_TYPE}}
+
+            # Tests
+            - name: Tests
+              run: ${{github.workspace}}/build/${{env.PROJECT_NAME}}_Tests/${{env.BUILD_TYPE}}/${{env.PROJECT_NAME}}_Tests
+              

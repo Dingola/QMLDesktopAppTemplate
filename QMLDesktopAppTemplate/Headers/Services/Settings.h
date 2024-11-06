@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Qobject>
+#include <QObject>
 #include <QSettings>
 
 namespace QmlApp

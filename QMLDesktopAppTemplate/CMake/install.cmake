@@ -22,7 +22,7 @@ write_basic_package_version_file(
 set(CONFIG_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CONFIG_DIR ${CMAKE_BINARY_DIR})
 set(${PROJECT_NAME}_INCLUDE_DIR "\${${PROJECT_NAME}_SOURCE_DIR}/include")
-configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/CMake/Config.cmake.in
     "${CMAKE_BINARY_DIR}/CMakePackage/${PROJECT_NAME}Config.cmake"
     INSTALL_DESTINATION lib/cmake/${PROJECT_NAME}
     PATH_VARS ${PROJECT_NAME}_INCLUDE_DIR)

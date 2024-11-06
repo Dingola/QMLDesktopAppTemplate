@@ -70,36 +70,43 @@ qt_standard_project_setup()
 
 add_executable(${PROJECT_NAME})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2 dwmapi)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
 include(${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/Doxygen.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/GoogleTest.cmake)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES 
-	LINK_FLAGS /SUBSYSTEM:CONSOLE
-    WIN32_EXECUTABLE ON
-    MACOSX_BUNDLE ON
-)
+if (WIN32)
+    set_target_properties(${PROJECT_NAME} PROPERTIES 
+        LINK_FLAGS "/SUBSYSTEM:CONSOLE"
+        WIN32_EXECUTABLE ON
+    )
+elseif (APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES 
+        MACOSX_BUNDLE ON
+    )
+endif()
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
 target_sources(${PROJECT_NAME}
     PRIVATE
 		${Headers}
-        ${Sources}
+		${Sources}
 )
 
-# Retrieve the absolute path to qmake and then use that path to find
-# the windeployqt executable
-get_target_property(QMAKE_EXE Qt6::qmake IMPORTED_LOCATION)
-get_filename_component(QT_BIN_DIR "${QMAKE_EXE}" DIRECTORY)
+if (WIN32)
+	# Retrieve the absolute path to qmake and then use that path to find
+	# the windeployqt executable
+	get_target_property(QMAKE_EXE Qt6::qmake IMPORTED_LOCATION)
+	get_filename_component(QT_BIN_DIR "${QMAKE_EXE}" DIRECTORY)
 
-find_program(WINDEPLOYQT_ENV_SETUP qtenv2.bat HINTS "${QT_BIN_DIR}")
-find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT_BIN_DIR}")
+	find_program(WINDEPLOYQT_ENV_SETUP qtenv2.bat HINTS "${QT_BIN_DIR}")
+	find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT_BIN_DIR}")
 
-# Run windeployqt immediately after build
-add_custom_command(TARGET ${PROJECT_NAME}
-	POST_BUILD
-	COMMAND "${WINDEPLOYQT_ENV_SETUP}" && "${WINDEPLOYQT_EXECUTABLE}" \"$<TARGET_FILE:${PROJECT_NAME}>\"
-)
+	# Run windeployqt immediately after build
+	add_custom_command(TARGET ${PROJECT_NAME}
+		POST_BUILD
+		COMMAND "${WINDEPLOYQT_ENV_SETUP}" && "${WINDEPLOYQT_EXECUTABLE}" \"$<TARGET_FILE:${PROJECT_NAME}>\"
+	)
+endif()
 
 ############################################
 ### Setup source groups                  ###

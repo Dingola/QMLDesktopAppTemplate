@@ -19,6 +19,7 @@ ExternalProject_Add(${Target}
 	UPDATE_DISCONNECTED ${Dont_Update_Build}
 	CMAKE_ARGS
 		-DCMAKE_INSTALL_PREFIX:PATH=${Third_Party_Project_Directory}/${Target}_install/
+		-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 		${ARGN}
 )
 	")

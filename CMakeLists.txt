@@ -8,7 +8,7 @@ set(main_project_name "QMLDesktopAppTemplate")
 project(${main_project_name}_Solution LANGUAGES CXX)
 
 # Suppress specific compiler warnings
-add_definitions("/wd4114")
+#add_definitions("/wd4114")
 
 ############################################
 ### Build Options                        ###
@@ -46,6 +46,18 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Set the build type if not set
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel.")
+endif()
+
+############################################
+### Thread Configuration for Linux       ###
+############################################
+
+if (UNIX)
+    set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+    set(CMAKE_HAVE_THREADS_LIBRARY 1)
+    set(CMAKE_USE_WIN32_THREADS_INIT 0)
+    set(CMAKE_USE_PTHREADS_INIT 1)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
 endif()
 
 ############################################
