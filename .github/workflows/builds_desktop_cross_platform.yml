@@ -152,5 +152,5 @@ jobs:
 
             # Tests
             - name: Tests
-              run: ${{github.workspace}}/build/${{env.PROJECT_NAME}}_Tests/${{env.BUILD_TYPE}}/${{env.PROJECT_NAME}}_Tests
+              run: ${{github.workspace}}/build/${{env.PROJECT_NAME}}_Tests
               
