@@ -112,6 +112,46 @@ add_custom_command(TARGET _compile_translations POST_BUILD
 )
 
 ############################################
+### Configuration Information            ###
+############################################
+
+message(STATUS "###############################################################")
+message(STATUS "###          Configuration Information")
+message(STATUS "###          Project: ${PROJECT_NAME}")
+message(STATUS "###############################################################")
+message(STATUS "")
+message(STATUS "  CMake Version:                ${CMAKE_VERSION}")
+message(STATUS "  CMake Prefix Path:            ${CMAKE_PREFIX_PATH}")
+message(STATUS "  CMake Install Prefix Path:    ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "  Host System Name:             ${CMAKE_HOST_SYSTEM_NAME}")
+message(STATUS "  Host System Version:          ${CMAKE_HOST_SYSTEM_VERSION}")
+message(STATUS "  Target System Name:           ${CMAKE_SYSTEM_NAME}")
+message(STATUS "  Target System Version:        ${CMAKE_SYSTEM_VERSION}")
+message(STATUS "  Source Directory:             ${CMAKE_SOURCE_DIR}")
+message(STATUS "  Build Type:                   ${CMAKE_BUILD_TYPE}")
+message(STATUS "  Toolchain File:               ${CMAKE_TOOLCHAIN_FILE}")
+message(STATUS "  C++ Compiler:                 ${CMAKE_CXX_COMPILER}")
+message(STATUS "  C Compiler:                   ${CMAKE_C_COMPILER}")
+message(STATUS "  Build Tool:                   ${CMAKE_BUILD_TOOL}")
+message(STATUS "  Module Path:                  ${CMAKE_MODULE_PATH}")
+message(STATUS "  Binary Directory:             ${CMAKE_BINARY_DIR}")
+message(STATUS "  Current Source Directory:     ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS "  Current Binary Directory:     ${CMAKE_CURRENT_BINARY_DIR}")
+message(STATUS "")
+message(STATUS "-----------------------------------------------")
+message(STATUS "")
+message(STATUS "  Third Party Include Directory:            ${THIRD_PARTY_INCLUDE_DIR}")
+message(STATUS "  ${main_project_name}_BUILD_TARGET_TYPE:  ${${main_project_name}_BUILD_TARGET_TYPE}")
+message(STATUS "  ${doc_sub_target_name}_BUILD_DOC:          ${${doc_sub_target_name}_BUILD_DOC}")
+message(STATUS "  Qt6 Directory (qt6_path env):             ${qt6_path}")
+message(STATUS "  Translation Files Directory:              ${CMAKE_SOURCE_DIR}/${TS_DIR}")
+message(STATUS "  Translation Files:                        ${TS_FILES}")
+message(STATUS "")
+message(STATUS "-----------------------------------------------")
+message(STATUS "")
+message(STATUS "###############################################################")
+
+############################################
 ### Setup Target Build Type              ###
 ############################################
 
