@@ -278,9 +278,7 @@ namespace QmlApp
 		QString current_group_name = group;
 		SettingsNode* parent_node = m_root_node;
 		SettingsNode* group_node = parent_node->find_node_by_group(current_group_name);
-		SettingsNode* key_node = nullptr;
 		SettingsNode* sub_group_node = nullptr;
-		QModelIndex key_node_model_index;
 
 		// If the root group node does not exist, create it.
 		if (group_node == nullptr)
@@ -291,17 +289,7 @@ namespace QmlApp
 		// Create or update the key if the group is a root group
 		if (key_parts.size() == 1)
 		{
-			key_node = group_node->find_node_by_key(key);
-
-			if (key_node == nullptr)
-			{
-				create_node("", key, value, group_node);
-			}
-			else
-			{
-				key_node_model_index = index(key_node->row(), key_node->column_count(), createIndex(group_node->row(), 0, group_node));
-				setData(key_node_model_index, value, Qt::EditRole);
-			}
+			create_or_update_key_node(key, value, group_node);
 		}
 		else
 		{
@@ -321,17 +309,7 @@ namespace QmlApp
 			}
 
 			// Create or update the key in the last subgroup
-			key_node = group_node->find_node_by_key(key_parts.last());
-
-			if (key_node == nullptr)
-			{
-				create_node("", key_parts.last(), value, group_node);
-			}
-			else
-			{
-				key_node_model_index = index(key_node->row(), key_node->column_count(), createIndex(group_node->row(), 0, group_node));
-				setData(key_node_model_index, value, Qt::EditRole);
-			}
+			create_or_update_key_node(key_parts.last(), value, group_node);
 		}
 
 		if (m_sync_with_app_settings)
@@ -422,6 +400,40 @@ namespace QmlApp
 		}
 
 		return result;
+	}
+
+	/**
+	* @brief Creates or updates a key node with the specified key, value, and parent group node.
+	*
+	* This function creates a new key node with the specified key and value if it does not already exist
+	* in the parent group node. If the key node already exists, its value is updated.
+	*
+	* @param key The key of the key node.
+	* @param value The value to set.
+	* @param group_node The parent group node.
+	* @return The created or updated key node.
+	*/
+	SettingsNode* SettingsModel::create_or_update_key_node(const QString& key, const QVariant& value, SettingsNode* group_node)
+	{
+		SettingsNode* key_node = nullptr;
+		QModelIndex key_node_model_index;
+
+		if (group_node != nullptr)
+		{
+			key_node = group_node->find_node_by_key(key);
+
+			if (key_node == nullptr)
+			{
+				create_node("", key, value, group_node);
+			}
+			else
+			{
+				key_node_model_index = index(key_node->row(), key_node->column_count(), createIndex(group_node->row(), 0, group_node));
+				setData(key_node_model_index, value, Qt::EditRole);
+			}
+		}
+
+		return key_node;
 	}
 
 	/**

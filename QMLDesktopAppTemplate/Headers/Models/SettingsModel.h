@@ -46,6 +46,7 @@ namespace QmlApp
 		void load_settings_from_app_settings();
 
 		SettingsNode* create_node(const QString& group, const QString& key, const QVariant& value, SettingsNode* parent = nullptr);
+		SettingsNode* create_or_update_key_node(const QString& key, const QVariant& value, SettingsNode* group_node);
 		[[nodiscard]] QList<SettingsNode*> get_leaf_nodes() const;
 		void collect_leaf_nodes(SettingsNode* node, QList<SettingsNode*>& leaf_nodes) const;
 
