@@ -1,4 +1,5 @@
 # QML Desktop App Template
+![Desktop Cross-Platform CI Build](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/builds_desktop_cross_platform.yml/badge.svg)
 
 ## Description
 This project is a template for creating QML-based desktop applications. The solution 
@@ -46,36 +47,35 @@ and Windows.
 ***
 
 ## How To Install and Run
+> [!TIP]
+> The CMake GUI presents another alternative option to build the project.
 
-### - Prerequisites
+### 1) Prerequisites
 * CMake ( Minimum required version 3.19.0 ): [Download](https://cmake.org/download/ "CMake Downloads")
 * A C++20 compatible compiler (e.g., GCC 10+, Clang 10+, MSVC 19.28+)
 * Qt Installer (Qt 6.8): [Download](https://www.qt.io/download-qt-installer-oss)
 * Doxygen: [Download](https://www.doxygen.nl/download.html)
 * Optional for Doxygen is LaTeX if enabled in `Doxygen.in`-File and installed.
+> [!NOTE]
 > All other dependencies are automatically installed by CMake.
 
-### - Setting up
+### 2) Setting up
 ```
 git clone https://github.com/Dingola/QMLDesktopAppTemplate.git
 cd QMLDesktopAppTemplate/
 ```
 
-### - Environment Variables
-
-Ensure that the `QT6_PATH` environment variable is set, for example: `..\Qt\6.8.0\msvc2022_64`
-
-### - Configuring and Building
+### 3) Configuring and Building
+> [!IMPORTANT]
+> Ensure that the `QT6_PATH` environment variable is set, for example: `..\Qt\6.8.0\msvc2022_64`
 ```
 cmake -B _build -S . -G "Visual Studio 17 2022" -A x64
 cd _build
 cmake --build . --config Release
 ```
 
-### - Run the project
+### 4) Run the project
 ```
 cd QMLDesktopAppTemplate/Release/
 ./QMLDesktopAppTemplate.exe
 ```
-
-> The CMake GUI presents another alternative option to build the project.
