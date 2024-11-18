@@ -125,9 +125,10 @@ jobs:
             # Install dependencies
             - name: Install dependencies
               run: |
-                sudo apt-get update && sudo apt-get install -y build-essential libpthread-stubs0-dev;
-                sudo apt-get install -y libgl1-mesa-dev;
-                sudo apt-get install -y libxcb-cursor0 libxcb-cursor-dev;
+                sudo apt-get update && sudo apt-get install -y build-essential libpthread-stubs0-dev
+                sudo apt-get install -y libgl1-mesa-dev
+                sudo apt-get install -y libxcb-cursor0 libxcb-cursor-dev
+                sudo apt-get install -y libx11-xcb-dev
                 sudo apt-get install -y xvfb
 
             # Set qt6_path environment variable
@@ -157,5 +158,6 @@ jobs:
               run:  |
                 Xvfb :99 &
                 export DISPLAY=:99
+                sleep 3
                 ${{github.workspace}}/build/${{env.PROJECT_NAME}}_Tests/${{env.PROJECT_NAME}}_Tests
               
