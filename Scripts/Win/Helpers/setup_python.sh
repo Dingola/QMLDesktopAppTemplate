@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source Helpers/utils.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -W)"
+source "$SCRIPT_DIR/utils.sh"
 
 # Function to install or update Python
 setup_python() {
