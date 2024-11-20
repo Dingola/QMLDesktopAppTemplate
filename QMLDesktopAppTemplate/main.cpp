@@ -6,6 +6,10 @@
 #include <QGuiApplication>
 
 #include "QmlApplication.h"
+#include "Services/Logging/Logger.h"
+#include "Services/Logging/FileAppender.h"
+#include "Services/Logging/ConsoleAppender.h"
+#include "Services/Logging/SimpleFormatter.h"
 
 using namespace QmlApp;
 
@@ -31,6 +35,20 @@ int main(int argc, char *argv[])
     app.setApplicationName(QStringLiteral("QmlApp"));
     app.setOrganizationName(QStringLiteral("QmlDesktopAppTemplate"));
     app.setOrganizationDomain(QStringLiteral("AdrianHelbig.de"));
+
+	// Set up logging
+	QSharedPointer<SimpleFormatter> formatter = QSharedPointer<SimpleFormatter>::create();
+	QSharedPointer<ConsoleAppender> console_appender = QSharedPointer<ConsoleAppender>::create(formatter);
+	QSharedPointer<FileAppender> file_appender = QSharedPointer<FileAppender>::create("QmlApp.log", formatter);
+
+	Logger::get_instance().add_appender(console_appender);
+	Logger::get_instance().add_appender(file_appender);
+
+	// Install the custom message handler
+	qInstallMessageHandler([](QtMsgType type, const QMessageLogContext& context, const QString& msg)
+						   {
+							   Logger::get_instance().log(type, context, msg);
+						   });
 
     QmlApplication qml_app;
 
