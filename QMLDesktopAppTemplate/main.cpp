@@ -37,9 +37,9 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain(QStringLiteral("AdrianHelbig.de"));
 
 	// Set up logging
-	QSharedPointer<SimpleFormatter> formatter = QSharedPointer<SimpleFormatter>::create();
-	QSharedPointer<ConsoleAppender> console_appender = QSharedPointer<ConsoleAppender>::create(formatter);
-	QSharedPointer<FileAppender> file_appender = QSharedPointer<FileAppender>::create("QmlApp.log", formatter);
+	auto formatter = QSharedPointer<SimpleFormatter>::create();
+	auto console_appender = QSharedPointer<ConsoleAppender>::create(formatter);
+	auto file_appender = QSharedPointer<FileAppender>::create("QmlApp.log", formatter);
 
 	Logger::get_instance().add_appender(console_appender);
 	Logger::get_instance().add_appender(file_appender);

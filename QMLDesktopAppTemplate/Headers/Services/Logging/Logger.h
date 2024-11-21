@@ -19,6 +19,7 @@ namespace QmlApp
 	public:
 		void log(QtMsgType type, const QMessageLogContext& context, const QString& msg);
 		void add_appender(const QSharedPointer<LogAppender>& appender);
+		void clear_appenders();
 
 	private:
 		QList<QSharedPointer<LogAppender>> m_appenders;

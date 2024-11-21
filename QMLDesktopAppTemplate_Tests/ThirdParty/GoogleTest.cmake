@@ -31,3 +31,4 @@ set_target_properties(gmock PROPERTIES FOLDER ThirdParty)
 set_target_properties(gmock_main PROPERTIES FOLDER ThirdParty)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC gtest_main)
+target_link_libraries(${PROJECT_NAME} PUBLIC gmock_main)

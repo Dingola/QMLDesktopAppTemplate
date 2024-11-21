@@ -37,19 +37,19 @@ namespace QmlApp
         switch (message.get_type())
         {
             case QtDebugMsg:
-                qDebug() << formatted_message;
+                qDebug().nospace().noquote() << formatted_message;
                 break;
             case QtInfoMsg:
-                qInfo() << formatted_message;
+                qInfo().nospace().noquote() << formatted_message;
                 break;
             case QtWarningMsg:
-                qWarning() << formatted_message;
+                qWarning().nospace().noquote() << formatted_message;
                 break;
             case QtCriticalMsg:
-                qCritical() << formatted_message;
+                qCritical().nospace().noquote() << formatted_message;
                 break;
             case QtFatalMsg:
-                qFatal() << formatted_message;
+                qFatal().nospace().noquote() << formatted_message;
                 break;
             default:
                 break;

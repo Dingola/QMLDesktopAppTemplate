@@ -43,4 +43,12 @@ namespace QmlApp
 		m_appenders.append(appender);
 	}
 
+	/**
+	* @brief Clears all log appenders from the logger.
+	*/
+	void Logger::clear_appenders()
+	{
+		m_appenders.clear();
+	}
+
 } // namespace QmlApp
