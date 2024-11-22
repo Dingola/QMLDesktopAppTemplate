@@ -41,7 +41,7 @@ namespace QmlApp
 	 * @param message The log message to append.
 	 * @param context The context of the log message.
 	 */
-	void FileAppender::append(const LogMessage& message, const QMessageLogContext& context)
+	void FileAppender::internal_append(const LogMessage& message, const QMessageLogContext& context)
 	{
 		QString formatted_message = m_formatter->format(message, context);
 

@@ -11,8 +11,8 @@ using namespace QmlApp;
 class SimpleFormatterTest : public ::testing::Test
 {
 protected:
-    void SetUp() override;
-    void TearDown() override;
+	void SetUp() override;
+	void TearDown() override;
 
-    QSharedPointer<SimpleFormatter> m_formatter;
+	QSharedPointer<SimpleFormatter> m_formatter;
 };

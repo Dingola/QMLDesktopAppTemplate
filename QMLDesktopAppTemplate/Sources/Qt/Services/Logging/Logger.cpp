@@ -22,11 +22,14 @@ namespace QmlApp
 	{
 		LogMessage log_message(type, msg);
 
-		for (const auto& appender : m_appenders)
+		if (type >= m_log_level)
 		{
-			if (appender != nullptr)
+			for (const auto& appender : m_appenders)
 			{
-				appender->append(log_message, context);
+				if (appender != nullptr)
+				{
+					appender->append(log_message, context);
+				}
 			}
 		}
 	}
@@ -44,11 +47,40 @@ namespace QmlApp
 	}
 
 	/**
-	* @brief Clears all log appenders from the logger.
-	*/
+	 * @brief Clears all log appenders from the logger.
+	 *
+	 * This function removes all log appenders from the list of registered log appenders.
+	 */
 	void Logger::clear_appenders()
 	{
 		m_appenders.clear();
+	}
+
+	/**
+	 * @brief Sets the log level of the logger.
+	 *
+	 * This function sets the log level of the logger to the specified level.
+	 * It specifies which message levels will be logged by this logger.
+	 * Message levels lower than this value will be discarded.
+	 *
+	 * @param level The log level to set.
+	 */
+	void Logger::set_log_level(QtMsgType level)
+	{
+		m_log_level = level;
+	}
+
+	/**
+	 * @brief Returns the current log level of the logger.
+	 *
+	 * This function returns the current log level of the logger.
+	 * The log level determines which message levels are being logged.
+	 *
+	 * @return The current log level of the logger.
+	 */
+	QtMsgType Logger::get_log_level() const
+	{
+		return m_log_level;
 	}
 
 } // namespace QmlApp

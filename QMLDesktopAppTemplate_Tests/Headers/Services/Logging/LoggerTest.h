@@ -12,14 +12,15 @@ using namespace QmlApp;
 class MockLogAppender : public LogAppender
 {
 public:
-    MOCK_METHOD(void, append, (const LogMessage& message, const QMessageLogContext& context), (override));
+	MOCK_METHOD(void, internal_append, (const LogMessage& message, const QMessageLogContext& context), (override));
+
 };
 
 class LoggerTest : public ::testing::Test
 {
 protected:
-    void SetUp() override;
-    void TearDown() override;
+	void SetUp() override;
+	void TearDown() override;
 
-    QSharedPointer<MockLogAppender> m_mock_appender;
+	QSharedPointer<MockLogAppender> m_mock_appender;
 };
