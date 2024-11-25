@@ -62,6 +62,10 @@ jobs:
                 target: 'desktop'
                 arch: 'win64_msvc2022_64'
 
+            # Set QT6_DIR environment variable
+            - name: Set QT6_DIR
+              run: echo "QT6_DIR=C:\\Qt\\${{env.QT_VERSION}}\\msvc2022_64" >> $GITHUB_ENV
+
             # Configure CMake
             - name: Configure CMake
               run: |
@@ -131,9 +135,9 @@ jobs:
                 sudo apt-get install -y libx11-xcb-dev
                 sudo apt-get install -y xvfb
 
-            # Set qt6_path environment variable
-            - name: Set qt6_path
-              run: echo "qt6_path=${{github.workspace}}/../Qt/${{env.QT_VERSION}}/gcc_64" >> $GITHUB_ENV
+            # Set QT6_DIR environment variable
+            - name: Set QT6_DIR
+              run: echo "QT6_DIR=${{github.workspace}}/../Qt/${{env.QT_VERSION}}/gcc_64" >> $GITHUB_ENV
 
             # Configure CMake
             - name: Configure CMake

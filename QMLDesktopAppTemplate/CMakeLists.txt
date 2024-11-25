@@ -32,7 +32,7 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 ############################################
 
 # Set the documentation sub-target name
-set(doc_sub_target_name ${main_project_name})
+set(doc_sub_target_name ${MAIN_PROJECT_NAME})
 
 ############################################
 ### Setup Project File Includes          ###
@@ -57,16 +57,16 @@ include_directories(Headers Sources)
 ### Qt6 Configuration                    ###
 ############################################
 
-if ("$ENV{qt6_path}" STREQUAL "")
-	set(qt6_path "E:\\Qt\\6.8.0\\msvc2022_64\\")
+if ("$ENV{QT6_DIR}" STREQUAL "")
+	set(QT6_DIR "E:\\Qt\\6.8.0\\msvc2022_64\\")
 else()
-	set(qt6_path "$ENV{qt6_path}")
+	set(QT6_DIR "$ENV{QT6_DIR}")
 endif()
 
-if (EXISTS ${qt6_path})
-	set(CMAKE_PREFIX_PATH ${qt6_path})
+if (EXISTS ${QT6_DIR})
+	set(CMAKE_PREFIX_PATH ${QT6_DIR})
 else()
-	message(WARNING "The specified qt6 path '${qt6_path}' does not exist")
+	message(WARNING "The specified qt6 path '${QT6_DIR}' does not exist")
 endif()
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Qml Quick QuickControls2 Gui LinguistTools)
@@ -86,7 +86,7 @@ file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/${TS_DIR})
 
 # Define a custom target for updating translations
 add_custom_target(_update_translations
-    COMMAND ${qt6_path}/bin/lupdate ${CMAKE_SOURCE_DIR} -ts ${TS_FILES}
+    COMMAND ${QT6_DIR}/bin/lupdate ${CMAKE_SOURCE_DIR} -ts ${TS_FILES}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMENT "Updating translation files"
 )
@@ -94,7 +94,7 @@ add_custom_target(_update_translations
 # Define a custom target for compiling translations
 add_custom_target(_compile_translations
     DEPENDS ${TS_FILES}
-    COMMAND ${qt6_path}/bin/lrelease ${TS_FILES}
+    COMMAND ${QT6_DIR}/bin/lrelease ${TS_FILES}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMENT "Compiling translation files"
 )
@@ -142,9 +142,9 @@ message(STATUS "")
 message(STATUS "-----------------------------------------------")
 message(STATUS "")
 message(STATUS "  Third Party Include Directory:            ${THIRD_PARTY_INCLUDE_DIR}")
-message(STATUS "  ${main_project_name}_BUILD_TARGET_TYPE:  ${${main_project_name}_BUILD_TARGET_TYPE}")
+message(STATUS "  ${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE:  ${${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE}")
 message(STATUS "  ${doc_sub_target_name}_BUILD_DOC:          ${${doc_sub_target_name}_BUILD_DOC}")
-message(STATUS "  Qt6 Directory (qt6_path env):             ${qt6_path}")
+message(STATUS "  Qt6 Directory (QT6_DIR env):              ${QT6_DIR}")
 message(STATUS "  Translation Files Directory:              ${CMAKE_SOURCE_DIR}/${TS_DIR}")
 message(STATUS "  Translation Files:                        ${TS_FILES}")
 message(STATUS "")
@@ -156,17 +156,17 @@ message(STATUS "###############################################################"
 ### Setup Target Build Type              ###
 ############################################
 
-if (${main_project_name}_BUILD_TARGET_TYPE STREQUAL executable)
+if (${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE STREQUAL executable)
 	add_executable(${PROJECT_NAME})
-elseif (${main_project_name}_BUILD_TARGET_TYPE STREQUAL dynamic_library)
+elseif (${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE STREQUAL dynamic_library)
 	add_library(${PROJECT_NAME} SHARED)
-elseif (${main_project_name}_BUILD_TARGET_TYPE STREQUAL static_library)
+elseif (${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE STREQUAL static_library)
 	add_library(${PROJECT_NAME})
 else()
 	message(FATAL_ERROR "Build type not specified")
 endif()
 
-target_link_libraries(${main_project_name} PRIVATE Qt6::Widgets Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
+target_link_libraries(${MAIN_PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
 include(${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/Doxygen.cmake)
 
 if (WIN32)
@@ -194,14 +194,11 @@ if (WIN32)
 	#
 	# Link: https://doc.qt.io/qt-6/windows-deployment.html
 	#
-	if (${main_project_name}_BUILD_TARGET_TYPE STREQUAL executable)
+	if (${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE STREQUAL executable)
 		# Retrieve the absolute path to qmake and then use that path to find
 		# the windeployqt executable
-		get_target_property(QMAKE_EXE Qt6::qmake IMPORTED_LOCATION)
-		get_filename_component(QT_BIN_DIR "${QMAKE_EXE}" DIRECTORY)
-
-		find_program(WINDEPLOYQT_ENV_SETUP qtenv2.bat HINTS "${QT_BIN_DIR}")
-		find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT_BIN_DIR}")
+        find_program(WINDEPLOYQT_ENV_SETUP qtenv2.bat HINTS "${QT6_DIR}/bin")
+        find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT6_DIR}/bin")
 
 		# Run windeployqt immediately after build
 		add_custom_command(TARGET ${PROJECT_NAME}

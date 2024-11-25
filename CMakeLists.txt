@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 ### Project Configuration                ###
 ############################################
 
-set(main_project_name "QMLDesktopAppTemplate")
-project(${main_project_name}_Solution LANGUAGES CXX)
+set(MAIN_PROJECT_NAME "QMLDesktopAppTemplate")
+project(${MAIN_PROJECT_NAME}_Solution LANGUAGES CXX)
 
 # Suppress specific compiler warnings
 #add_definitions("/wd4114")
@@ -15,11 +15,11 @@ project(${main_project_name}_Solution LANGUAGES CXX)
 ############################################
 
 # Set the build type for the target project
-set(${main_project_name}_BUILD_TARGET_TYPE "executable" CACHE STRING "Build target options")
-set_property(CACHE ${main_project_name}_BUILD_TARGET_TYPE PROPERTY STRINGS executable dynamic_library static_library)
+set(${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE "executable" CACHE STRING "Build target options")
+set_property(CACHE ${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE PROPERTY STRINGS executable dynamic_library static_library)
 
 # Option to build the test project
-option(${main_project_name}_BUILD_TEST_PROJECT "Build test project" OFF)
+option(${MAIN_PROJECT_NAME}_BUILD_TEST_PROJECT "Build test project" OFF)
 
 # Path to ThirdParty directories
 if (WIN32)
@@ -78,8 +78,8 @@ message(STATUS "")
 message(STATUS "-----------------------------------------------")
 message(STATUS "")
 message(STATUS "  Third Party Include Directory:            ${THIRD_PARTY_INCLUDE_DIR}")
-message(STATUS "  ${main_project_name}_BUILD_TARGET_TYPE:  ${${main_project_name}_BUILD_TARGET_TYPE}")
-message(STATUS "  ${main_project_name}_BUILD_TEST_PROJECT: ${${main_project_name}_BUILD_TEST_PROJECT}")
+message(STATUS "  ${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE:  ${${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE}")
+message(STATUS "  ${MAIN_PROJECT_NAME}_BUILD_TEST_PROJECT: ${${MAIN_PROJECT_NAME}_BUILD_TEST_PROJECT}")
 message(STATUS "")
 message(STATUS "-----------------------------------------------")
 message(STATUS "")
@@ -102,14 +102,14 @@ endif()
 ############################################
 
 # Add the main project
-add_subdirectory(${main_project_name})
+add_subdirectory(${MAIN_PROJECT_NAME})
 
 # Add the test project conditionally
-if (${main_project_name}_BUILD_TEST_PROJECT)
-  add_subdirectory(${main_project_name}_Tests)
-  set(startup_project ${main_project_name}_Tests)
+if (${MAIN_PROJECT_NAME}_BUILD_TEST_PROJECT)
+  add_subdirectory(${MAIN_PROJECT_NAME}_Tests)
+  set(startup_project ${MAIN_PROJECT_NAME}_Tests)
 else()
-  set(startup_project ${main_project_name})
+  set(startup_project ${MAIN_PROJECT_NAME})
 endif()
 
 # Set the startup project

@@ -4,9 +4,9 @@ cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 ### Setup project                        ###
 ############################################
 
-get_filename_component(current_source_dir_name ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+get_filename_component(CURRENT_SOURCE_DIR_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
-project(${current_source_dir_name} LANGUAGES CXX VERSION "0.0.0")
+project(${CURRENT_SOURCE_DIR_NAME} LANGUAGES CXX VERSION "0.0.0")
 
 # Include CMake helper scripts
 include(${CMAKE_SOURCE_DIR}/CMake/SourceGroups.cmake)
@@ -47,16 +47,16 @@ include_directories(Headers Sources)
 ### Qt6 Configuration                    ###
 ############################################
 
-if ("$ENV{qt6_path}" STREQUAL "")
-	set(qt6_path "E:\\Qt\\6.8.0\\msvc2022_64\\")
+if ("$ENV{QT6_DIR}" STREQUAL "")
+	set(QT6_DIR "E:\\Qt\\6.8.0\\msvc2022_64\\")
 else()
-	set(qt6_path "$ENV{qt6_path}")
+	set(QT6_DIR "$ENV{QT6_DIR}")
 endif()
 
-if (EXISTS ${qt6_path})
-	set(CMAKE_PREFIX_PATH ${qt6_path})
+if (EXISTS ${QT6_DIR})
+	set(CMAKE_PREFIX_PATH ${QT6_DIR})
 else()
-	message(WARNING "The specified qt6 path '${qt6_path}' does not exist")
+	message(WARNING "The specified qt6 path '${QT6_DIR}' does not exist")
 endif()
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Qml Quick QuickControls2 Gui LinguistTools)
@@ -95,7 +95,7 @@ message(STATUS "-----------------------------------------------")
 message(STATUS "")
 message(STATUS "  Third Party Include Directory:            ${THIRD_PARTY_INCLUDE_DIR}")
 message(STATUS "  ${doc_sub_target_name}_BUILD_DOC:          ${${doc_sub_target_name}_BUILD_DOC}")
-message(STATUS "  Qt6 Directory (qt6_path env):             ${qt6_path}")
+message(STATUS "  Qt6 Directory (QT6_DIR env):              ${QT6_DIR}")
 message(STATUS "")
 message(STATUS "-----------------------------------------------")
 message(STATUS "")
@@ -132,11 +132,8 @@ target_sources(${PROJECT_NAME}
 if (WIN32)
 	# Retrieve the absolute path to qmake and then use that path to find
 	# the windeployqt executable
-	get_target_property(QMAKE_EXE Qt6::qmake IMPORTED_LOCATION)
-	get_filename_component(QT_BIN_DIR "${QMAKE_EXE}" DIRECTORY)
-
-	find_program(WINDEPLOYQT_ENV_SETUP qtenv2.bat HINTS "${QT_BIN_DIR}")
-	find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT_BIN_DIR}")
+	find_program(WINDEPLOYQT_ENV_SETUP qtenv2.bat HINTS "${QT6_DIR}/bin")
+	find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT6_DIR}/bin")
 
 	# Run windeployqt immediately after build
 	add_custom_command(TARGET ${PROJECT_NAME}
@@ -153,9 +150,9 @@ GROUP_FILES("${Sources}" "Source Files")
 GROUP_FILES("${Headers}" "Header Files")
 
 # Specifies include libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC ${main_project_name})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${MAIN_PROJECT_NAME})
 
 # Specifies include directories to use when compiling a given target
 target_include_directories(${PROJECT_NAME} PUBLIC 
 	${CMAKE_CURRENT_LIST_DIR} 
-	${CMAKE_SOURCE_DIR}/${main_project_name}/Headers)
+	${CMAKE_SOURCE_DIR}/${MAIN_PROJECT_NAME}/Headers)
