@@ -35,8 +35,16 @@
 */Docs/*
 
 # Directories
-_build*/*
-install
+**/_build*/*
+**/_deploy*/*
+**/install*/*
 
 # Ignore compiled translation files
 *.qm
+
+# Ignore log files
+*.log
+
+# Ignore Qt 6.x folders
+**/Qt*/
+**/6*/
