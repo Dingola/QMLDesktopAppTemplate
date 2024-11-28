@@ -38,6 +38,7 @@
 **/_build*/*
 **/_deploy*/*
 **/install*/*
+**/ThirdPartyDir*/*
 
 # Ignore compiled translation files
 *.qm

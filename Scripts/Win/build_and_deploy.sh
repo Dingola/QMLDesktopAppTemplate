@@ -17,8 +17,10 @@ MIN_REQUIRED_PYTHON_VERSION="3.14.0"
 MIN_REQUIRED_PYTHON_VERSION_SUFFIX="a1"
 BUILD_DIR_NAME="_build_release"
 DEPLOY_DIR_NAME="_deploy"
-BUILD_ZIP_ARCHIVE=true
+BUILD_ZIP_ARCHIVE=false
 PACKAGE_NAME="${PROJECT_NAME}_deploy.zip"
+BUILD_NSIS_INSTALLER=false
+NSIS_SCRIPT="installer.nsi"
 
 # Ensure the script is running as admin
 check_admin
@@ -89,6 +91,28 @@ if [ "$BUILD_ZIP_ARCHIVE" = true ]; then
     fi
 else
     echo "Skipping packaging of deployment directory."
+fi
+
+# Create NSIS installer if BUILD_NSIS_INSTALLER is true
+if [ "$BUILD_NSIS_INSTALLER" = true ]; then
+    # Check if NSIS is installed
+    if command -v makensis &> /dev/null; then
+        echo "Creating installer using NSIS..."
+        makensis -DPROJECT_NAME="$PROJECT_NAME" -DDEPLOY_DIR="$DEPLOY_DIR_NAME" "$NSIS_SCRIPT"
+
+        # Check if the installer creation was successful
+        if [ $? -ne 0 ]; then
+            echo "Error: Failed to create the installer."
+            read -p "Press enter to continue"
+            exit 1
+        fi
+    else
+        echo "NSIS is not installed. Please install NSIS to create an installer."
+        read -p "Press enter to continue"
+        exit 1
+    fi
+else
+    echo "Skipping creation of NSIS installer."
 fi
 
 echo "Deployment completed successfully."
