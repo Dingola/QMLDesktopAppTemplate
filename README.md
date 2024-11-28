@@ -147,5 +147,5 @@ _update_translations
 ### Compiling Translations
 To compile the translation files, use the following custom target:
 ```
-_update_translations
+_compile_translations
 ```
