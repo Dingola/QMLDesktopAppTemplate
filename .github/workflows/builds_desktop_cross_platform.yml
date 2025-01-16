@@ -86,7 +86,7 @@ jobs:
 
             # Tests
             - name: Tests
-              run: ${{github.workspace}}/build/${{env.PROJECT_NAME}}_Tests\${{env.BUILD_TYPE}}\${{env.PROJECT_NAME}}_Tests.exe
+              run: ${{github.workspace}}/build/QML_Project_Tests\${{env.BUILD_TYPE}}\${{env.PROJECT_NAME}}_Tests.exe
 
     #------------------------------------------------
     # Linux build
@@ -163,5 +163,5 @@ jobs:
                 Xvfb :99 &
                 export DISPLAY=:99
                 sleep 3
-                ${{github.workspace}}/build/${{env.PROJECT_NAME}}_Tests/${{env.PROJECT_NAME}}_Tests
+                ${{github.workspace}}/build/QML_Project_Tests/${{env.PROJECT_NAME}}_Tests
               
