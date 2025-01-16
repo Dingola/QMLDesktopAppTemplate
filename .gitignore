@@ -47,5 +47,5 @@
 *.log
 
 # Ignore Qt 6.x folders
-**/Qt*/
+Scripts/*/Qt*/
 **/6*/
