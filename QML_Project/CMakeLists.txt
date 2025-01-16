@@ -4,9 +4,7 @@ cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 ### Project Configuration                ###
 ############################################
 
-get_filename_component(current_source_dir_name ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-
-project(${current_source_dir_name} LANGUAGES CXX VERSION "0.0.0")
+project(QML_Project LANGUAGES CXX VERSION "0.0.0")
 configure_file(Config.h.in Config.h)
 
 # Include CMake helper scripts
@@ -166,12 +164,16 @@ else()
 	message(FATAL_ERROR "Build type not specified")
 endif()
 
-target_link_libraries(${MAIN_PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
 include(${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/Doxygen.cmake)
 
 if (WIN32)
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set_target_properties(${PROJECT_NAME} PROPERTIES 
+            LINK_FLAGS "/SUBSYSTEM:CONSOLE"
+        )
+    endif()
     set_target_properties(${PROJECT_NAME} PROPERTIES 
-        LINK_FLAGS "/SUBSYSTEM:CONSOLE"
         WIN32_EXECUTABLE ON
     )
 elseif (APPLE)
@@ -179,6 +181,7 @@ elseif (APPLE)
         MACOSX_BUNDLE ON
     )
 endif()
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${MAIN_PROJECT_NAME})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
 target_sources(${PROJECT_NAME}

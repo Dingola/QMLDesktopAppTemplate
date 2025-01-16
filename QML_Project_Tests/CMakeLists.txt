@@ -4,9 +4,7 @@ cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 ### Setup project                        ###
 ############################################
 
-get_filename_component(CURRENT_SOURCE_DIR_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-
-project(${CURRENT_SOURCE_DIR_NAME} LANGUAGES CXX VERSION "0.0.0")
+project(QML_Project_Tests LANGUAGES CXX VERSION "0.0.0")
 
 # Include CMake helper scripts
 include(${CMAKE_SOURCE_DIR}/CMake/SourceGroups.cmake)
@@ -121,6 +119,7 @@ elseif (APPLE)
         MACOSX_BUNDLE ON
     )
 endif()
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${MAIN_PROJECT_NAME}_Tests)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
 target_sources(${PROJECT_NAME}
@@ -150,9 +149,9 @@ GROUP_FILES("${Sources}" "Source Files")
 GROUP_FILES("${Headers}" "Header Files")
 
 # Specifies include libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC ${MAIN_PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} PUBLIC QML_Project)
 
 # Specifies include directories to use when compiling a given target
 target_include_directories(${PROJECT_NAME} PUBLIC 
 	${CMAKE_CURRENT_LIST_DIR} 
-	${CMAKE_SOURCE_DIR}/${MAIN_PROJECT_NAME}/Headers)
+	${CMAKE_SOURCE_DIR}/QML_Project/Headers)
