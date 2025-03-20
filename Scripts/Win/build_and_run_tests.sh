@@ -26,7 +26,7 @@ setup_and_build $PROJECT_DIR $PROJECT_NAME $BUILD_TYPE $BUILD_TARGET_TYPE $BUILD
 # Run tests
 BUILD_DIR="$(pwd -W)/$BUILD_DIR_NAME"
 if [ "$BUILD_TEST_PROJECT" = true ]; then
-    "$BUILD_DIR/${PROJECT_NAME}_Tests/${BUILD_TYPE}/${PROJECT_NAME}_Tests.exe"
+    "$BUILD_DIR/QML_Project_Tests/${BUILD_TYPE}/${PROJECT_NAME}_Tests.exe"
 fi
 
 read -p "Press enter to continue"
