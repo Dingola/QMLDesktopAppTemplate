@@ -44,8 +44,8 @@ file(GLOB_RECURSE Headers
 file(GLOB_RECURSE Sources
      "main.cpp"
      "Sources/*.cpp"
-     "Headers/QT/*/*.cpp"
-     "Sources/QT/*.cpp"
+     "Headers/Qt/*/*.cpp"
+     "Sources/Qt/*.cpp"
      "Sources/QML/*.qml"
 )
 
