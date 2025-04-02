@@ -34,10 +34,18 @@ set(doc_sub_target_name ${PROJECT_NAME})
 file(GLOB_RECURSE Headers
      "Headers/*.h"
 )
-file(GLOB_RECURSE Sources
+
+file(GLOB_RECURSE CPP_Sources
      "main.cpp"
-	 "Sources/*.cpp"
+     "Sources/*.cpp"
 )
+
+file(GLOB_RECURSE QML_Sources
+     "Sources/QML/*.qml"
+)
+
+# Combine C++ and QML sources
+set(Sources ${CPP_Sources} ${QML_Sources})
 
 include_directories(Headers Sources)
 
@@ -61,6 +69,28 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets Qml Quick QuickControls2 Gui Lingui
 qt_standard_project_setup()
 #qt6_add_resources(RSCS resources.qrc)
 #add_custom_target(gen_qrc DEPENDS ${RSCS})
+
+############################################
+### Clang-Format Configuration           ###
+############################################
+
+if(USE_CLANG_FORMAT)
+    find_program(CLANG_FORMAT "clang-format" HINTS ${CLANG_FORMAT_PATH})
+    if(CLANG_FORMAT)
+        # Define a custom target for formatting code
+        add_custom_target(_format_code_tests
+            COMMAND ${CLANG_FORMAT}
+            -style=file
+            -i
+            ${Headers}
+            ${CPP_Sources}
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            COMMENT "Formatting code with clang-format"
+        )
+    else()
+        message(WARNING "clang-format not found. Please ensure clang-format is installed and the path is set correctly.")
+    endif()
+endif()
 
 ############################################
 ### Configuration Information            ###

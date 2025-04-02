@@ -21,6 +21,12 @@ set_property(CACHE ${MAIN_PROJECT_NAME}_BUILD_TARGET_TYPE PROPERTY STRINGS execu
 # Option to build the test project
 option(${MAIN_PROJECT_NAME}_BUILD_TEST_PROJECT "Build test project" OFF)
 
+# Option to use clang-format
+option(USE_CLANG_FORMAT "Use clang-format for code formatting" OFF)
+
+# Option to specify the path to clang-format
+set(CLANG_FORMAT_PATH "" CACHE PATH "Path to clang-format executable")
+
 # Path to ThirdParty directories
 if (WIN32)
     set(DEFAULT_THIRD_PARTY_PATH "$ENV{USERPROFILE}/ThirdParty")

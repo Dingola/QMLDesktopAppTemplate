@@ -41,13 +41,19 @@ file(GLOB_RECURSE Headers
      "Headers/*/*.h"
 )
 
-file(GLOB_RECURSE Sources
+file(GLOB_RECURSE CPP_Sources
      "main.cpp"
      "Sources/*.cpp"
      "Headers/Qt/*/*.cpp"
      "Sources/Qt/*.cpp"
+)
+
+file(GLOB_RECURSE QML_Sources
      "Sources/QML/*.qml"
 )
+
+# Combine C++ and QML sources
+set(Sources ${CPP_Sources} ${QML_Sources})
 
 include_directories(Headers Sources)
 
@@ -109,6 +115,28 @@ add_custom_command(TARGET _compile_translations POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/translations
     COMMAND ${CMAKE_COMMAND} -E copy ${QM_FILES} $<TARGET_FILE_DIR:${PROJECT_NAME}>/translations
 )
+
+############################################
+### Clang-Format Configuration           ###
+############################################
+
+if(USE_CLANG_FORMAT)
+    find_program(CLANG_FORMAT "clang-format" HINTS ${CLANG_FORMAT_PATH})
+    if(CLANG_FORMAT)
+        # Define a custom target for formatting code
+        add_custom_target(_format_code_project
+            COMMAND ${CLANG_FORMAT}
+            -style=file
+            -i
+            ${Headers}
+            ${CPP_Sources}
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            COMMENT "Formatting code with clang-format"
+        )
+    else()
+        message(WARNING "clang-format not found. Please ensure clang-format is installed and the path is set correctly.")
+    endif()
+endif()
 
 ############################################
 ### Configuration Information            ###
