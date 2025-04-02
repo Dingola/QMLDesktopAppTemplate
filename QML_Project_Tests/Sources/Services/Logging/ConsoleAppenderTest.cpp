@@ -1,31 +1,32 @@
 #include "Services/Logging/ConsoleAppenderTest.h"
 
 #include <QDebug>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 QTextStream* ConsoleAppenderTest::m_text_stream = nullptr;
 QBuffer ConsoleAppenderTest::m_buffer;
 
 ConsoleAppenderTest::ConsoleAppenderTest()
 {
-	m_buffer.open(QIODevice::WriteOnly);
-	m_text_stream = new QTextStream(&m_buffer);
+    m_buffer.open(QIODevice::WriteOnly);
+    m_text_stream = new QTextStream(&m_buffer);
 }
 
 ConsoleAppenderTest::~ConsoleAppenderTest()
 {
-	delete m_text_stream;
+    delete m_text_stream;
 }
 
 void ConsoleAppenderTest::SetUp()
 {
-	m_console_appender = QSharedPointer<ConsoleAppender>::create(QSharedPointer<SimpleFormatter>::create());
+    m_console_appender =
+        QSharedPointer<ConsoleAppender>::create(QSharedPointer<SimpleFormatter>::create());
 }
 
 void ConsoleAppenderTest::TearDown()
 {
-	m_console_appender.reset();
+    m_console_appender.reset();
 }
 
 /**
@@ -38,11 +39,12 @@ void ConsoleAppenderTest::TearDown()
  * @param context The context of the message (file, line, function, category).
  * @param msg The message content.
  */
-void ConsoleAppenderTest::customMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+void ConsoleAppenderTest::customMessageHandler(QtMsgType type, const QMessageLogContext& context,
+                                               const QString& msg)
 {
-	Q_UNUSED(type);
-	Q_UNUSED(context);
-	(*m_text_stream) << msg << Qt::endl;
+    Q_UNUSED(type);
+    Q_UNUSED(context);
+    (*m_text_stream) << msg << Qt::endl;
 }
 
 /**
@@ -59,17 +61,17 @@ void ConsoleAppenderTest::customMessageHandler(QtMsgType type, const QMessageLog
  */
 std::string ConsoleAppenderTest::capture_console_output(std::function<void()> func)
 {
-	// Custom message handler to redirect qDebug output to the buffer
-	auto original_handler = qInstallMessageHandler([](QtMsgType type, const QMessageLogContext& context, const QString& msg)
-												   {
-													   customMessageHandler(type, context, msg);
-												   });
+    // Custom message handler to redirect qDebug output to the buffer
+    auto original_handler = qInstallMessageHandler(
+        [](QtMsgType type, const QMessageLogContext& context, const QString& msg) {
+            customMessageHandler(type, context, msg);
+        });
 
-	m_text_stream->flush();
-	func();
-	qInstallMessageHandler(original_handler);
+    m_text_stream->flush();
+    func();
+    qInstallMessageHandler(original_handler);
 
-	return m_buffer.data().toStdString();
+    return m_buffer.data().toStdString();
 }
 
 /**
@@ -82,18 +84,16 @@ std::string ConsoleAppenderTest::capture_console_output(std::function<void()> fu
  */
 TEST_F(ConsoleAppenderTest, LogMessageIsAppended)
 {
-	QtMsgType type = QtDebugMsg;
-	QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
-	QString message = "Test message";
-	SimpleFormatter formatter;
-	QString expected_message = formatter.format(LogMessage(type, message), context);
+    QtMsgType type = QtDebugMsg;
+    QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
+    QString message = "Test message";
+    SimpleFormatter formatter;
+    QString expected_message = formatter.format(LogMessage(type, message), context);
 
-	std::string output = capture_console_output([&]()
-												{
-													m_console_appender->append(LogMessage(type, message), context);
-												});
+    std::string output = capture_console_output(
+        [&]() { m_console_appender->append(LogMessage(type, message), context); });
 
-	ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
+    ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
 }
 
 /**
@@ -104,33 +104,30 @@ TEST_F(ConsoleAppenderTest, LogMessageIsAppended)
  */
 TEST_F(ConsoleAppenderTest, LogMessageWithDifferentTypes)
 {
-	struct TestCase
-	{
-		QtMsgType type;
-		QString message;
-	};
+    struct TestCase {
+            QtMsgType type;
+            QString message;
+    };
 
-	std::vector<TestCase> test_cases = {
-		{QtDebugMsg, "Debug message"},
-		{QtInfoMsg, "Info message"},
-		{QtWarningMsg, "Warning message"},
-		{QtCriticalMsg, "Critical message"}
-	};
+    std::vector<TestCase> test_cases = {{QtDebugMsg, "Debug message"},
+                                        {QtInfoMsg, "Info message"},
+                                        {QtWarningMsg, "Warning message"},
+                                        {QtCriticalMsg, "Critical message"}};
 
-	SimpleFormatter formatter;
+    SimpleFormatter formatter;
 
-	for (const auto& test_case : test_cases)
-	{
-		QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
-		QString expected_message = formatter.format(LogMessage(test_case.type, test_case.message), context);
+    for (const auto& test_case: test_cases)
+    {
+        QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
+        QString expected_message =
+            formatter.format(LogMessage(test_case.type, test_case.message), context);
 
-		std::string output = capture_console_output([&]()
-													{
-														m_console_appender->append(LogMessage(test_case.type, test_case.message), context);
-													});
+        std::string output = capture_console_output([&]() {
+            m_console_appender->append(LogMessage(test_case.type, test_case.message), context);
+        });
 
-		ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
-	}
+        ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
+    }
 }
 
 /**
@@ -141,18 +138,16 @@ TEST_F(ConsoleAppenderTest, LogMessageWithDifferentTypes)
  */
 TEST_F(ConsoleAppenderTest, FoundMessageMatchesSimpleFormatter)
 {
-	QtMsgType type = QtDebugMsg;
-	QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
-	QString message = "Formatted message test";
-	SimpleFormatter formatter;
-	QString expected_message = formatter.format(LogMessage(type, message), context);
+    QtMsgType type = QtDebugMsg;
+    QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
+    QString message = "Formatted message test";
+    SimpleFormatter formatter;
+    QString expected_message = formatter.format(LogMessage(type, message), context);
 
-	std::string output = capture_console_output([&]()
-												{
-													m_console_appender->append(LogMessage(type, message), context);
-												});
+    std::string output = capture_console_output(
+        [&]() { m_console_appender->append(LogMessage(type, message), context); });
 
-	ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
+    ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
 }
 
 /**
@@ -163,20 +158,18 @@ TEST_F(ConsoleAppenderTest, FoundMessageMatchesSimpleFormatter)
  */
 TEST_F(ConsoleAppenderTest, LogMessageBelowLogLevelIsNotAppended)
 {
-	m_console_appender->set_log_level(QtWarningMsg);
+    m_console_appender->set_log_level(QtWarningMsg);
 
-	QtMsgType type = QtDebugMsg;
-	QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
-	QString message = "This message should not appear";
-	SimpleFormatter formatter;
-	QString expected_message = formatter.format(LogMessage(type, message), context);
+    QtMsgType type = QtDebugMsg;
+    QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
+    QString message = "This message should not appear";
+    SimpleFormatter formatter;
+    QString expected_message = formatter.format(LogMessage(type, message), context);
 
-	std::string output = capture_console_output([&]()
-												{
-													m_console_appender->append(LogMessage(type, message), context);
-												});
+    std::string output = capture_console_output(
+        [&]() { m_console_appender->append(LogMessage(type, message), context); });
 
-	ASSERT_EQ(output.find(expected_message.toStdString()), std::string::npos);
+    ASSERT_EQ(output.find(expected_message.toStdString()), std::string::npos);
 }
 
 /**
@@ -187,33 +180,30 @@ TEST_F(ConsoleAppenderTest, LogMessageBelowLogLevelIsNotAppended)
  */
 TEST_F(ConsoleAppenderTest, LogMessageAtOrAboveLogLevelIsAppended)
 {
-	m_console_appender->set_log_level(QtWarningMsg);
+    m_console_appender->set_log_level(QtWarningMsg);
 
-	struct TestCase
-	{
-		QtMsgType type;
-		QString message;
-	};
+    struct TestCase {
+            QtMsgType type;
+            QString message;
+    };
 
-	std::vector<TestCase> test_cases = {
-		{QtWarningMsg, "Warning message"},
-		{QtCriticalMsg, "Critical message"}
-	};
+    std::vector<TestCase> test_cases = {{QtWarningMsg, "Warning message"},
+                                        {QtCriticalMsg, "Critical message"}};
 
-	SimpleFormatter formatter;
+    SimpleFormatter formatter;
 
-	for (const auto& test_case : test_cases)
-	{
-		QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
-		QString expected_message = formatter.format(LogMessage(test_case.type, test_case.message), context);
+    for (const auto& test_case: test_cases)
+    {
+        QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
+        QString expected_message =
+            formatter.format(LogMessage(test_case.type, test_case.message), context);
 
-		std::string output = capture_console_output([&]()
-													{
-														m_console_appender->append(LogMessage(test_case.type, test_case.message), context);
-													});
+        std::string output = capture_console_output([&]() {
+            m_console_appender->append(LogMessage(test_case.type, test_case.message), context);
+        });
 
-		ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
-	}
+        ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
+    }
 }
 
 /**
@@ -224,27 +214,23 @@ TEST_F(ConsoleAppenderTest, LogMessageAtOrAboveLogLevelIsAppended)
  */
 TEST_F(ConsoleAppenderTest, LogLevelCanBeChangedDynamically)
 {
-	m_console_appender->set_log_level(QtWarningMsg);
+    m_console_appender->set_log_level(QtWarningMsg);
 
-	QtMsgType type = QtDebugMsg;
-	QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
-	QString message = "This message should not appear";
-	SimpleFormatter formatter;
-	QString expected_message = formatter.format(LogMessage(type, message), context);
+    QtMsgType type = QtDebugMsg;
+    QMessageLogContext context(__FILE__, __LINE__, Q_FUNC_INFO, "category");
+    QString message = "This message should not appear";
+    SimpleFormatter formatter;
+    QString expected_message = formatter.format(LogMessage(type, message), context);
 
-	std::string output = capture_console_output([&]()
-												{
-													m_console_appender->append(LogMessage(type, message), context);
-												});
+    std::string output = capture_console_output(
+        [&]() { m_console_appender->append(LogMessage(type, message), context); });
 
-	ASSERT_EQ(output.find(expected_message.toStdString()), std::string::npos);
+    ASSERT_EQ(output.find(expected_message.toStdString()), std::string::npos);
 
-	m_console_appender->set_log_level(QtDebugMsg);
+    m_console_appender->set_log_level(QtDebugMsg);
 
-	output = capture_console_output([&]()
-									{
-										m_console_appender->append(LogMessage(type, message), context);
-									});
+    output = capture_console_output(
+        [&]() { m_console_appender->append(LogMessage(type, message), context); });
 
-	ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
+    ASSERT_NE(output.find(expected_message.toStdString()), std::string::npos);
 }

@@ -10,20 +10,20 @@
 
 using namespace QmlApp;
 
-class SettingsTest : public ::testing::Test
+class SettingsTest: public ::testing::Test
 {
-public:
-    Settings* m_settings = nullptr;
+    public:
+        Settings* m_settings = nullptr;
 
-protected:
-    void SetUp() override
-    {
-        m_settings = new Settings();
-    }
+    protected:
+        void SetUp() override
+        {
+            m_settings = new Settings();
+        }
 
-    void TearDown() override
-    {
-        m_settings->clear();
-        delete m_settings;
-    }
+        void TearDown() override
+        {
+            m_settings->clear();
+            delete m_settings;
+        }
 };

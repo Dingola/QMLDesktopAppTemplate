@@ -8,13 +8,13 @@
 
 using namespace QmlApp;
 
-class FileAppenderTest : public ::testing::Test
+class FileAppenderTest: public ::testing::Test
 {
-protected:
-	void SetUp() override;
-	void TearDown() override;
+    protected:
+        void SetUp() override;
+        void TearDown() override;
 
-public:
-	QSharedPointer<FileAppender> m_file_appender;
-	QString m_test_file_path;
+    public:
+        QSharedPointer<FileAppender> m_file_appender;
+        QString m_test_file_path;
 };

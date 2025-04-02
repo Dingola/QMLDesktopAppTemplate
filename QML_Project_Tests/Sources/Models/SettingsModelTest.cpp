@@ -244,12 +244,12 @@ TEST_F(SettingsModelTest, SetValueTest)
 TEST_F(SettingsModelTest, LoadFromFileTest)
 {
     QString exe_path = QCoreApplication::applicationDirPath();
-	QString file_path = exe_path + "/settingsmodeltest_load_settings.ini";
-	QFile file(file_path);
+    QString file_path = exe_path + "/settingsmodeltest_load_settings.ini";
+    QFile file(file_path);
 
-	if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-	{
-		QTextStream stream(&file);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream stream(&file);
         stream << "[%General]\n";
         stream << "key1=value1\n";
         stream << "key2=value2\n";
@@ -261,8 +261,8 @@ TEST_F(SettingsModelTest, LoadFromFileTest)
         stream << "group2/group3/key2=value01\n";
         stream << "[TestGroup_3]\n";
         stream << "group3/key1=value02\n";
-		file.close();
-	}
+        file.close();
+    }
 
     m_settings_model->loadFromFile(file_path);
 

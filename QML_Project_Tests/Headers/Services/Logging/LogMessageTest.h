@@ -6,9 +6,9 @@
 
 using namespace QmlApp;
 
-class LogMessageTest : public ::testing::Test
+class LogMessageTest: public ::testing::Test
 {
-protected:
-	void SetUp() override;
-	void TearDown() override;
+    protected:
+        void SetUp() override;
+        void TearDown() override;
 };

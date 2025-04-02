@@ -1,12 +1,8 @@
 #include "Services/Logging/LogMessageTest.h"
 
-void LogMessageTest::SetUp()
-{
-}
+void LogMessageTest::SetUp() {}
 
-void LogMessageTest::TearDown()
-{
-}
+void LogMessageTest::TearDown() {}
 
 /**
  * @brief Tests the default constructor of LogMessage.
@@ -16,9 +12,9 @@ void LogMessageTest::TearDown()
  */
 TEST_F(LogMessageTest, DefaultConstructor)
 {
-	LogMessage log_message;
-	EXPECT_EQ(log_message.get_type(), QtDebugMsg);
-	EXPECT_EQ(log_message.get_message(), QString());
+    LogMessage log_message;
+    EXPECT_EQ(log_message.get_type(), QtDebugMsg);
+    EXPECT_EQ(log_message.get_message(), QString());
 }
 
 /**
@@ -29,11 +25,11 @@ TEST_F(LogMessageTest, DefaultConstructor)
  */
 TEST_F(LogMessageTest, ParameterizedConstructor)
 {
-	QtMsgType type = QtWarningMsg;
-	QString message = "Test warning message";
-	LogMessage log_message(type, message);
-	EXPECT_EQ(log_message.get_type(), type);
-	EXPECT_EQ(log_message.get_message(), message);
+    QtMsgType type = QtWarningMsg;
+    QString message = "Test warning message";
+    LogMessage log_message(type, message);
+    EXPECT_EQ(log_message.get_type(), type);
+    EXPECT_EQ(log_message.get_message(), message);
 }
 
 /**
@@ -44,8 +40,8 @@ TEST_F(LogMessageTest, ParameterizedConstructor)
  */
 TEST_F(LogMessageTest, GetType)
 {
-	LogMessage log_message(QtCriticalMsg, "Critical message");
-	EXPECT_EQ(log_message.get_type(), QtCriticalMsg);
+    LogMessage log_message(QtCriticalMsg, "Critical message");
+    EXPECT_EQ(log_message.get_type(), QtCriticalMsg);
 }
 
 /**
@@ -56,7 +52,7 @@ TEST_F(LogMessageTest, GetType)
  */
 TEST_F(LogMessageTest, GetMessage)
 {
-	QString message = "Info message";
-	LogMessage log_message(QtInfoMsg, message);
-	EXPECT_EQ(log_message.get_message(), message);
+    QString message = "Info message";
+    LogMessage log_message(QtInfoMsg, message);
+    EXPECT_EQ(log_message.get_message(), message);
 }

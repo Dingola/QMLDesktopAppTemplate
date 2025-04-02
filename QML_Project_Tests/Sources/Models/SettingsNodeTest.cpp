@@ -196,7 +196,8 @@ TEST_F(SettingsNodeTest, FindNodeByGroupTest)
     EXPECT_EQ(result_node, child_node);
 
     // Test when node has grandchild
-    SettingsNode* grandchild_node = new SettingsNode("GrandchildGroup", "GrandchildKey", "GrandchildValue");
+    SettingsNode* grandchild_node =
+        new SettingsNode("GrandchildGroup", "GrandchildKey", "GrandchildValue");
     child_node->append_child(grandchild_node);
     result_node = m_settings_node->find_node_by_group("GrandchildGroup");
     EXPECT_EQ(result_node, grandchild_node);
@@ -212,7 +213,8 @@ TEST_F(SettingsNodeTest, FindNodeByKeyTest)
     EXPECT_EQ(result_node, child_node);
 
     // Test when node has grandchild
-    SettingsNode* grandchild_node = new SettingsNode("GrandchildGroup", "GrandchildKey", "GrandchildValue");
+    SettingsNode* grandchild_node =
+        new SettingsNode("GrandchildGroup", "GrandchildKey", "GrandchildValue");
     child_node->append_child(grandchild_node);
     result_node = m_settings_node->find_node_by_key("GrandchildKey");
     EXPECT_EQ(result_node, grandchild_node);
@@ -245,7 +247,8 @@ TEST_F(SettingsNodeTest, GetFullGroupTest)
     EXPECT_EQ(full_group, "ParentGroup");
 
     // Test when node has parent and grandparent
-    SettingsNode* grandparent_node = new SettingsNode("GrandparentGroup", "GrandparentKey", "GrandparentValue");
+    SettingsNode* grandparent_node =
+        new SettingsNode("GrandparentGroup", "GrandparentKey", "GrandparentValue");
     grandparent_node->append_child(parent_node);
     full_group = m_settings_node->get_full_group();
     EXPECT_EQ(full_group, "GrandparentGroup/ParentGroup");

@@ -9,8 +9,8 @@
 
 namespace QmlApp
 {
-    class QmlApplication : public QObject
-    {
+class QmlApplication: public QObject
+{
         Q_OBJECT
 
     public:
@@ -27,6 +27,5 @@ namespace QmlApp
         Settings m_settings;
         SettingsModel m_settings_model;
         Translator m_translator;
-
-    };
-} // namespace QmlApp
+};
+}  // namespace QmlApp
