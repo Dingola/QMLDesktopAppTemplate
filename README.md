@@ -27,6 +27,7 @@ and Windows.
   - [4) Run the project](#4-run-the-project)
   - [5) Deployment](#5-deployment)
 - [Translations](#translations)
+- [Code Style and Linting](#code-style-and-linting)
 <br><br>
 
 ## [Configuration]
@@ -38,6 +39,10 @@ and Windows.
   - `static_library`
 
 * **<PROJECT_NAME>_BUILD_TEST_PROJECT:** Specifies whether the **TestProject** should also be built. Default is **Off**.
+
+* **USE_CLANG_FORMAT:** Specifies whether `clang-format` should be used for code formatting. Default is **Off**.
+
+* **CLANG_FORMAT_PATH:** Specifies the path to the `clang-format` executable. This option is required if `USE_CLANG_FORMAT` is enabled.
 
 * **<PROJECT_NAME>_BUILD_DOC:** Specifies whether **documentation** should be created for the app and/or the test app. The generated documentation is located in the `doc` folder of the respective project under `Docs/Doxygen/`. The formatting specifications for the documentation can be adjusted centrally in the config file **Doxyfile.in**, which is located in the solution folder. Default is **Off**.
 
@@ -69,6 +74,7 @@ and Windows.
 ## [Supported Platforms]
 - Windows 10+
 - Linux (tested on Ubuntu 24.04.1)
+- Mac (tested on macOS Ventura)
 <br><br><br>
 
 ## [How To Install and Run]
@@ -148,4 +154,33 @@ _update_translations
 To compile the translation files, use the following custom target:
 ```
 _compile_translations
+```
+
+---
+
+## [Code Style and Linting]
+
+This project uses `clang-format` for C++ code formatting.
+
+### Downloading clang-format
+
+To use `clang-format`, download the appropriate precompiled binary from the [LLVM Release Page](https://releases.llvm.org/download.html). Here are the recommended files based on your operating system:
+
+- **Windows**: [clang+llvm-18.1.8-x86_64-pc-windows-msvc.tar.xz](https://releases.llvm.org/download.html#18.1.8)
+- **Linux**: [clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz](https://releases.llvm.org/download.html#18.1.8)
+- **macOS**: [clang+llvm-18.1.8-arm64-apple-macos11.tar.xz](https://releases.llvm.org/download.html#18.1.8)
+
+### Configuration
+
+To use `clang-format` in your project, you need to set the following options in your CMake configuration:
+
+- **USE_CLANG_FORMAT**: Enable this option to use `clang-format` for code formatting.
+- **CLANG_FORMAT_PATH**: Specify the path to the `clang-format` executable.
+
+### Code Formatting
+
+To format the C++ code, run the following command after enabling the `USE_CLANG_FORMAT` option and specifying the path to `clang-format`:
+
+```
+cmake -DUSE_CLANG_FORMAT=ON -DCLANG_FORMAT_PATH="C:/path/to/clang+llvm-18.1.8-x86_64-pc-windows-msvc/bin" .. cmake --build . --target _format_code_project cmake --build . --target _format_code_tests
 ```
