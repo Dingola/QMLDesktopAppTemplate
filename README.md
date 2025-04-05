@@ -160,8 +160,6 @@ To compile the translation files, use the following custom target:
 _translations_compile
 ```
 
----
-
 ## [Code Style and Linting]
 
 This project uses `clang-format` and `clang-tidy` for code formatting and static analysis.
@@ -174,6 +172,8 @@ To use `clang-format` and `clang-tidy`, download the appropriate precompiled bin
 - **Linux**: [clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz](https://releases.llvm.org/download.html#18.1.8)
 - **macOS**: [clang+llvm-18.1.8-arm64-apple-macos11.tar.xz](https://releases.llvm.org/download.html#18.1.8)
 
+---
+
 ### Configuration
 
 To use `clang-format` and `clang-tidy` in your project, you need to set the following options in your CMake configuration:
@@ -181,6 +181,8 @@ To use `clang-format` and `clang-tidy` in your project, you need to set the foll
 - **USE_CLANG_FORMAT**: Enable this option to use `clang-format` for code formatting.
 - **USE_CLANG_TIDY**: Enable this option to use `clang-tidy` for static analysis.
 - **CLANG_TOOLS_PATH**: Specify the path to the `clang-format` and `clang-tidy` executables.
+
+---
 
 ### Code Formatting
 
@@ -206,6 +208,8 @@ cmake -DUSE_CLANG_TIDY=ON -DCLANG_TOOLS_PATH="C:/path/to/clang+llvm-18.1.8-x86_6
 cmake --build . --target _run_clang_tidy_project
 cmake --build . --target _run_clang_tidy_tests
 ```
+
+---
 
 ### Generating compile_commands.json
 
