@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 ############################################
 
 project(QML_Project LANGUAGES CXX VERSION "0.0.0")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 configure_file(Config.h.in Config.h)
 
 # Include CMake helper scripts
@@ -89,14 +90,14 @@ set(TS_FILES ${TS_DIR}/app_de.ts ${TS_DIR}/app_en.ts)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/${TS_DIR})
 
 # Define a custom target for updating translations
-add_custom_target(_update_translations
+add_custom_target(_translations_update
     COMMAND ${QT6_DIR}/bin/lupdate ${CMAKE_SOURCE_DIR} -ts ${TS_FILES}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMENT "Updating translation files"
 )
 
 # Define a custom target for compiling translations
-add_custom_target(_compile_translations
+add_custom_target(_translations_compile
     DEPENDS ${TS_FILES}
     COMMAND ${QT6_DIR}/bin/lrelease ${TS_FILES}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -121,10 +122,10 @@ add_custom_command(TARGET _compile_translations POST_BUILD
 ############################################
 
 if(USE_CLANG_FORMAT)
-    find_program(CLANG_FORMAT "clang-format" HINTS ${CLANG_FORMAT_PATH})
+    find_program(CLANG_FORMAT "clang-format" HINTS ${CLANG_TOOLS_PATH})
     if(CLANG_FORMAT)
         # Define a custom target for formatting code
-        add_custom_target(_format_code_project
+        add_custom_target(_run_clang_format_project
             COMMAND ${CLANG_FORMAT}
             -style=file
             -i
@@ -135,6 +136,27 @@ if(USE_CLANG_FORMAT)
         )
     else()
         message(WARNING "clang-format not found. Please ensure clang-format is installed and the path is set correctly.")
+    endif()
+endif()
+
+############################################
+### Clang-Tidy Configuration             ###
+############################################
+
+if(USE_CLANG_TIDY)
+    find_program(CLANG_TIDY "clang-tidy" HINTS ${CLANG_TOOLS_PATH})
+    if(CLANG_TIDY)
+        # Define a custom target for running clang-tidy
+        add_custom_target(_run_clang_tidy_project
+            COMMAND ${CLANG_TIDY}
+            -p=${CMAKE_BINARY_DIR}
+            ${Headers}
+            ${CPP_Sources}
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            COMMENT "Running clang-tidy for static analysis"
+        )
+    else()
+        message(WARNING "clang-tidy not found. Please ensure clang-tidy is installed and the path is set correctly.")
     endif()
 endif()
 

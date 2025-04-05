@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 
 set(MAIN_PROJECT_NAME "QMLDesktopAppTemplate")
 project(${MAIN_PROJECT_NAME}_Solution LANGUAGES CXX)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Suppress specific compiler warnings
 #add_definitions("/wd4114")
@@ -24,8 +25,11 @@ option(${MAIN_PROJECT_NAME}_BUILD_TEST_PROJECT "Build test project" OFF)
 # Option to use clang-format
 option(USE_CLANG_FORMAT "Use clang-format for code formatting" OFF)
 
-# Option to specify the path to clang-format
-set(CLANG_FORMAT_PATH "" CACHE PATH "Path to clang-format executable")
+# Option to use clang-tidy
+option(USE_CLANG_TIDY "Use clang-tidy for static analysis" OFF)
+
+# Option to specify the path to clang tools
+set(CLANG_TOOLS_PATH "" CACHE PATH "Path to clang tools (clang-format, clang-tidy)")
 
 # Path to ThirdParty directories
 if (WIN32)
