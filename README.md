@@ -42,7 +42,9 @@ and Windows.
 
 * **USE_CLANG_FORMAT:** Specifies whether `clang-format` should be used for code formatting. Default is **Off**.
 
-* **CLANG_FORMAT_PATH:** Specifies the path to the `clang-format` executable. This option is required if `USE_CLANG_FORMAT` is enabled.
+* **USE_CLANG_TIDY:** Specifies whether `clang-tidy` should be used for static analysis. Default is **Off**.
+
+* **CLANG_TOOLS_PATH:** Specifies the path to the `clang-format` and `clang-tidy` executables.
 
 * **<PROJECT_NAME>_BUILD_DOC:** Specifies whether **documentation** should be created for the app and/or the test app. The generated documentation is located in the `doc` folder of the respective project under `Docs/Doxygen/`. The formatting specifications for the documentation can be adjusted centrally in the config file **Doxyfile.in**, which is located in the solution folder. Default is **Off**.
 
@@ -87,6 +89,8 @@ and Windows.
 * Optional for Doxygen is LaTeX if enabled in `Doxygen.in`-File and installed.
 * Optional: `zip` for creating ZIP archives (if `BUILD_ZIP_ARCHIVE` is set to `true` in `build_and_deploy.sh`)
 * Optional: `NSIS` for creating installers (if `BUILD_NSIS_INSTALLER` is set to `true` in `build_and_deploy.sh`)
+* Optional: **Ninja**: Required to generate `compile_commands.json` for `clang-tidy`. [Download Ninja](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages)
+* Optional: **clang-format** and **clang-tidy**: To use `clang-format` and `clang-tidy`, download the appropriate precompiled binary from the [LLVM Release Page](https://releases.llvm.org/download.html)
 <br>
 
 > [!TIP]
@@ -145,7 +149,7 @@ The project includes custom targets for updating and compiling translation files
 ### Updating Translations
 To update the translation files, use the following custom target:
 ```
-_update_translations
+_translations_update
 ```
 
 ---
@@ -153,18 +157,18 @@ _update_translations
 ### Compiling Translations
 To compile the translation files, use the following custom target:
 ```
-_compile_translations
+_translations_compile
 ```
 
 ---
 
 ## [Code Style and Linting]
 
-This project uses `clang-format` for C++ code formatting.
+This project uses `clang-format` and `clang-tidy` for code formatting and static analysis.
 
-### Downloading clang-format
+### Downloading clang-format and clang-tidy
 
-To use `clang-format`, download the appropriate precompiled binary from the [LLVM Release Page](https://releases.llvm.org/download.html). Here are the recommended files based on your operating system:
+To use `clang-format` and `clang-tidy`, download the appropriate precompiled binary from the [LLVM Release Page](https://releases.llvm.org/download.html). Here are the recommended files based on your operating system:
 
 - **Windows**: [clang+llvm-18.1.8-x86_64-pc-windows-msvc.tar.xz](https://releases.llvm.org/download.html#18.1.8)
 - **Linux**: [clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz](https://releases.llvm.org/download.html#18.1.8)
@@ -172,15 +176,47 @@ To use `clang-format`, download the appropriate precompiled binary from the [LLV
 
 ### Configuration
 
-To use `clang-format` in your project, you need to set the following options in your CMake configuration:
+To use `clang-format` and `clang-tidy` in your project, you need to set the following options in your CMake configuration:
 
 - **USE_CLANG_FORMAT**: Enable this option to use `clang-format` for code formatting.
-- **CLANG_FORMAT_PATH**: Specify the path to the `clang-format` executable.
+- **USE_CLANG_TIDY**: Enable this option to use `clang-tidy` for static analysis.
+- **CLANG_TOOLS_PATH**: Specify the path to the `clang-format` and `clang-tidy` executables.
 
 ### Code Formatting
 
-To format the C++ code, run the following command after enabling the `USE_CLANG_FORMAT` option and specifying the path to `clang-format`:
+To format the C++ code and run static analysis, use the following custom targets:
 
 ```
-cmake -DUSE_CLANG_FORMAT=ON -DCLANG_FORMAT_PATH="C:/path/to/clang+llvm-18.1.8-x86_64-pc-windows-msvc/bin" .. cmake --build . --target _format_code_project cmake --build . --target _format_code_tests
+_run_clang_format_project
+_run_clang_tidy_project
 ```
+
+To format the C++ code, run the following command after enabling the USE_CLANG_FORMAT option and specifying the path to clang-format:
+
+```
+cmake -DUSE_CLANG_FORMAT=ON -DCLANG_TOOLS_PATH="C:/path/to/clang+llvm-18.1.8-x86_64-pc-windows-msvc/bin" ..
+cmake --build . --target _run_clang_format_project
+cmake --build . --target _run_clang_format_tests
+```
+
+To run static analysis with clang-tidy, ensure the USE_CLANG_TIDY option is enabled and the path to clang-tidy is specified:
+
+```
+cmake -DUSE_CLANG_TIDY=ON -DCLANG_TOOLS_PATH="C:/path/to/clang+llvm-18.1.8-x86_64-pc-windows-msvc/bin" ..
+cmake --build . --target _run_clang_tidy_project
+cmake --build . --target _run_clang_tidy_tests
+```
+
+### Generating compile_commands.json
+
+To use `clang-tidy`, you need to generate the `compile_commands.json` file. Run the `generate_compile_commands.sh` script to generate this file:
+```
+./Scripts/generate_compile_commands.sh
+```
+
+> [!NOTE]
+> If you encounter the following error:
+>
+> Ninja Does not match the generator used previously..  Either remove the CMakeCache.txt file and CMakeFiles directory or choose a different binary directory.
+>
+> This error occurs if the build directory specified in the script already exists and was built with a different generator. Either remove the CMake cache or adjust the script to use a different(/new) build directory.
