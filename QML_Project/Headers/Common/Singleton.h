@@ -33,7 +33,7 @@ class Singleton: public NonCopyable, public NonMoveable
          *
          * The destructor is virtual to ensure proper cleanup of derived classes.
          */
-        virtual ~Singleton() = default;
+        ~Singleton() override = default;
 
     public:
         /**
@@ -44,7 +44,7 @@ class Singleton: public NonCopyable, public NonMoveable
          *
          * @return The singleton instance of the class.
          */
-        static T& get_instance()
+        static auto get_instance() -> T&
         {
             static T instance;  // Thread-safe in C++11 and later
             return instance;

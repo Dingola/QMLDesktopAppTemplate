@@ -33,7 +33,7 @@ class LogFormatter
          * @param context The context of the log message.
          * @return The formatted log message as a QString.
          */
-        [[nodiscard]] virtual QString format(const LogMessage& log_message,
-                                             const QMessageLogContext& context) = 0;
+        [[nodiscard]] virtual auto format(const LogMessage& log_message,
+                                          const QMessageLogContext& context) -> QString = 0;
 };
 }  // namespace QmlApp

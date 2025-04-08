@@ -18,9 +18,11 @@ namespace QmlApp
  * @param value The value of the node.
  * @param parent The parent node.
  */
-SettingsNode::SettingsNode(const QString& group, const QString& key, const QVariant& value,
-                           SettingsNode* parent)
-    : m_group(group), m_key(key), m_value(value), m_parent_item(parent)
+SettingsNode::SettingsNode(QString group, QString key, QVariant value, SettingsNode* parent)
+    : m_group(std::move(group)),
+      m_key(std::move(key)),
+      m_value(std::move(value)),
+      m_parent_item(parent)
 {}
 
 /**
@@ -49,7 +51,7 @@ void SettingsNode::append_child(SettingsNode* child)
  * @return The child SettingsNode at the specified row, or nullptr if no child node exists at that
  * index.
  */
-SettingsNode* SettingsNode::get_child(int row) const
+auto SettingsNode::get_child(int row) const -> SettingsNode*
 {
     return m_child_items.value(row);
 }
@@ -59,7 +61,7 @@ SettingsNode* SettingsNode::get_child(int row) const
  *
  * @return A vector of child SettingsNode objects.
  */
-QVector<SettingsNode*> SettingsNode::child_items() const
+auto SettingsNode::child_items() const -> QVector<SettingsNode*>
 {
     return m_child_items;
 }
@@ -69,7 +71,7 @@ QVector<SettingsNode*> SettingsNode::child_items() const
  *
  * @return The number of child nodes.
  */
-int SettingsNode::child_count() const
+auto SettingsNode::child_count() const -> int
 {
     return m_child_items.count();
 }
@@ -79,7 +81,7 @@ int SettingsNode::child_count() const
  *
  * @return The number of columns.
  */
-int SettingsNode::column_count() const
+auto SettingsNode::column_count() const -> int
 {
     return 3;
 }
@@ -90,7 +92,7 @@ int SettingsNode::column_count() const
  * @param column The column index.
  * @return The data for the specified column.
  */
-QVariant SettingsNode::data(int column) const
+auto SettingsNode::data(int column) const -> QVariant
 {
     QVariant result;
 
@@ -116,7 +118,7 @@ QVariant SettingsNode::data(int column) const
  * @param column The column index.
  * @param value The value to set.
  */
-void SettingsNode::set_data(int column, const QVariant& value)
+auto SettingsNode::set_data(int column, const QVariant& value) -> void
 {
     if (column == 0)
     {
@@ -137,7 +139,7 @@ void SettingsNode::set_data(int column, const QVariant& value)
  *
  * @return The row index of the node.
  */
-int SettingsNode::row() const
+auto SettingsNode::row() const -> int
 {
     int row = 0;
 
@@ -154,7 +156,7 @@ int SettingsNode::row() const
  *
  * @return The parent SettingsNode of the current node.
  */
-SettingsNode* SettingsNode::get_parent_item() const
+auto SettingsNode::get_parent_item() const -> SettingsNode*
 {
     return m_parent_item;
 }
@@ -164,7 +166,7 @@ SettingsNode* SettingsNode::get_parent_item() const
  *
  * @return true if the node has a parent, false otherwise.
  */
-bool SettingsNode::has_parent() const
+auto SettingsNode::has_parent() const -> bool
 {
     return (m_parent_item != nullptr);
 }
@@ -174,7 +176,7 @@ bool SettingsNode::has_parent() const
  *
  * @return true if the node has child nodes, false otherwise.
  */
-bool SettingsNode::has_children() const
+auto SettingsNode::has_children() const -> bool
 {
     return !m_child_items.isEmpty();
 }
@@ -185,7 +187,7 @@ bool SettingsNode::has_children() const
  * @param group The group to search for.
  * @return The SettingsNode with the specified group, or nullptr if not found.
  */
-SettingsNode* SettingsNode::find_node_by_group(const QString& group) const
+auto SettingsNode::find_node_by_group(const QString& group) const -> SettingsNode*
 {
     // Check if the current node matches the group
     if (m_group == group)
@@ -216,7 +218,7 @@ SettingsNode* SettingsNode::find_node_by_group(const QString& group) const
  * @param key The key to search for.
  * @return The SettingsNode with the specified key, or nullptr if not found.
  */
-SettingsNode* SettingsNode::find_node_by_key(const QString& key) const
+auto SettingsNode::find_node_by_key(const QString& key) const -> SettingsNode*
 {
     // Check if the current node matches the key
     if (m_key == key)
@@ -246,7 +248,7 @@ SettingsNode* SettingsNode::find_node_by_key(const QString& key) const
  *
  * @param value The value to set.
  */
-void SettingsNode::set_value(const QVariant& value)
+auto SettingsNode::set_value(const QVariant& value) -> void
 {
     m_value = value;
 }
@@ -256,7 +258,7 @@ void SettingsNode::set_value(const QVariant& value)
  *
  * @return The group of the node.
  */
-QString SettingsNode::get_group() const
+auto SettingsNode::get_group() const -> QString
 {
     return m_group;
 }
@@ -266,7 +268,7 @@ QString SettingsNode::get_group() const
  *
  * @return The key of the node.
  */
-QString SettingsNode::get_key() const
+auto SettingsNode::get_key() const -> QString
 {
     return m_key;
 }
@@ -276,7 +278,7 @@ QString SettingsNode::get_key() const
  *
  * @return The value of the node.
  */
-QVariant SettingsNode::get_value() const
+auto SettingsNode::get_value() const -> QVariant
 {
     return m_value;
 }
@@ -286,7 +288,7 @@ QVariant SettingsNode::get_value() const
  *
  * @return The full group path of the node.
  */
-QString SettingsNode::get_full_group() const
+auto SettingsNode::get_full_group() const -> QString
 {
     QString result;
     SettingsNode* parent = get_parent_item();
@@ -311,7 +313,7 @@ QString SettingsNode::get_full_group() const
 /**
  * @brief Clears the node and its child nodes.
  */
-void SettingsNode::clear()
+auto SettingsNode::clear() -> void
 {
     qDeleteAll(m_child_items);
     m_child_items.clear();

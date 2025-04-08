@@ -29,7 +29,7 @@ class SimpleFormatter: public LogFormatter
          * @param context The context of the log message.
          * @return The formatted log message as a QString.
          */
-        [[nodiscard]] QString format(const LogMessage& log_message,
-                                     const QMessageLogContext& context) override;
+        [[nodiscard]] auto format(const LogMessage& log_message,
+                                  const QMessageLogContext& context) -> QString override;
 };
 }  // namespace QmlApp

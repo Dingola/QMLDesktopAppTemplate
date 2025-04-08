@@ -18,7 +18,8 @@ namespace QmlApp
  * @param context The context of the log message.
  * @return The formatted log message as a QString.
  */
-QString SimpleFormatter::format(const LogMessage& log_message, const QMessageLogContext& context)
+auto SimpleFormatter::format(const LogMessage& log_message,
+                             const QMessageLogContext& context) -> QString
 {
     const char* file = context.file ? context.file : "";
     const char* function = context.function ? context.function : "";

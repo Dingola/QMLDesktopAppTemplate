@@ -13,18 +13,20 @@ class Translator: public QObject
 
     public:
         explicit Translator(QObject* parent = nullptr);
-        virtual ~Translator() = default;
+        ~Translator() override = default;
 
+        // NOLINTBEGIN(modernize-use-trailing-return-type)
         [[nodiscard]] Q_INVOKABLE bool load_translation(const QString& language);
         [[nodiscard]] Q_INVOKABLE bool load_translation(const QLocale& locale);
         [[nodiscard]] Q_INVOKABLE bool load_default_translation();
 
         [[nodiscard]] Q_INVOKABLE QString get_current_language() const;
+        // NOLINTEND(modernize-use-trailing-return-type)
 
     private:
-        void remove_none_empty_translators();
-        [[nodiscard]] bool load(const QLocale& locale, const QString& filename,
-                                QTranslator& translator);
+        auto remove_none_empty_translators() -> void;
+        [[nodiscard]] auto load(const QLocale& locale, const QString& filename,
+                                QTranslator& translator) -> bool;
 
     signals:
         void languageChanged();

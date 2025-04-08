@@ -17,7 +17,7 @@ namespace QmlApp
  * @param parent The parent object.
  */
 SettingsModel::SettingsModel(Settings* settings, QObject* parent)
-    : m_settings(settings), m_sync_with_app_settings(true), QAbstractItemModel(parent)
+    : m_settings(settings), QAbstractItemModel(parent)
 {
     Q_ASSERT(settings != nullptr);
 
@@ -33,6 +33,8 @@ SettingsModel::~SettingsModel()
     delete m_root_node;
 }
 
+// NOLINTBEGIN(modernize-use-trailing-return-type)
+
 /**
  * @brief Returns the index of the item in the model with the specified row, column, and parent
  * index.
@@ -42,11 +44,11 @@ SettingsModel::~SettingsModel()
  * @param parent The parent index.
  * @return The index of the item.
  */
-QModelIndex SettingsModel::index(int row, int column, const QModelIndex& parent) const
+auto SettingsModel::index(int row, int column, const QModelIndex& parent) const -> QModelIndex
 {
     if (!hasIndex(row, column, parent))
     {
-        return QModelIndex();
+        return {};
     }
 
     SettingsNode* parent_node = nullptr;
@@ -68,7 +70,7 @@ QModelIndex SettingsModel::index(int row, int column, const QModelIndex& parent)
     }
     else
     {
-        return QModelIndex();
+        return {};
     }
 }
 
@@ -78,19 +80,19 @@ QModelIndex SettingsModel::index(int row, int column, const QModelIndex& parent)
  * @param index The index of the item.
  * @return The parent index of the item.
  */
-QModelIndex SettingsModel::parent(const QModelIndex& index) const
+auto SettingsModel::parent(const QModelIndex& index) const -> QModelIndex
 {
     if (!index.isValid())
     {
-        return QModelIndex();
+        return {};
     }
 
-    SettingsNode* child_node = static_cast<SettingsNode*>(index.internalPointer());
+    auto child_node = static_cast<SettingsNode*>(index.internalPointer());
     SettingsNode* parent_node = child_node->get_parent_item();
 
     if (parent_node == m_root_node)
     {
-        return QModelIndex();
+        return {};
     }
 
     return createIndex(parent_node->row(), 0, parent_node);
@@ -102,7 +104,7 @@ QModelIndex SettingsModel::parent(const QModelIndex& index) const
  * @param parent The parent index.
  * @return The number of rows.
  */
-int SettingsModel::rowCount(const QModelIndex& parent) const
+auto SettingsModel::rowCount(const QModelIndex& parent) const -> int
 {
     SettingsNode* parent_node = nullptr;
 
@@ -124,7 +126,7 @@ int SettingsModel::rowCount(const QModelIndex& parent) const
  * @param parent The parent index.
  * @return The number of columns.
  */
-int SettingsModel::columnCount(const QModelIndex& parent) const
+auto SettingsModel::columnCount(const QModelIndex& parent) const -> int
 {
     int result = 0;
 
@@ -147,7 +149,7 @@ int SettingsModel::columnCount(const QModelIndex& parent) const
  * @param role The role of the data.
  * @return The data for the index and role.
  */
-QVariant SettingsModel::data(const QModelIndex& index, int role) const
+auto SettingsModel::data(const QModelIndex& index, int role) const -> QVariant
 {
     QVariant result;
 
@@ -157,7 +159,7 @@ QVariant SettingsModel::data(const QModelIndex& index, int role) const
     }
     else
     {
-        SettingsNode* node = static_cast<SettingsNode*>(index.internalPointer());
+        auto node = static_cast<SettingsNode*>(index.internalPointer());
 
         if (role == Qt::DisplayRole || role == Qt::EditRole)
         {
@@ -193,13 +195,13 @@ QVariant SettingsModel::data(const QModelIndex& index, int role) const
  * @param role The role of the data.
  * @return True if the data was set successfully, false otherwise.
  */
-bool SettingsModel::setData(const QModelIndex& index, const QVariant& value, int role)
+auto SettingsModel::setData(const QModelIndex& index, const QVariant& value, int role) -> bool
 {
     bool result = index.isValid() && role == Qt::EditRole;
 
     if (result)
     {
-        SettingsNode* node = static_cast<SettingsNode*>(index.internalPointer());
+        auto node = static_cast<SettingsNode*>(index.internalPointer());
         node->set_data(index.column(), value);
 
         if (m_sync_with_app_settings)
@@ -225,7 +227,7 @@ bool SettingsModel::setData(const QModelIndex& index, const QVariant& value, int
  * @param index The index of the item.
  * @return The item flags.
  */
-Qt::ItemFlags SettingsModel::flags(const QModelIndex& index) const
+auto SettingsModel::flags(const QModelIndex& index) const -> Qt::ItemFlags
 {
     if (!index.isValid())
     {
@@ -240,7 +242,7 @@ Qt::ItemFlags SettingsModel::flags(const QModelIndex& index) const
  *
  * @return The role names for the model
  */
-QHash<int, QByteArray> SettingsModel::roleNames() const
+auto SettingsModel::roleNames() const -> QHash<int, QByteArray>
 {
     QHash<int, QByteArray> names;
     names[GroupRole] = "Group";
@@ -368,10 +370,12 @@ void SettingsModel::saveToFile(const QString& file_path)
     m_settings->saveToFile(file_path);
 }
 
+// NOLINTEND(modernize-use-trailing-return-type)
+
 /**
  * @brief Loads the settings from the Settings object.
  */
-void SettingsModel::load_settings_from_app_settings()
+auto SettingsModel::load_settings_from_app_settings() -> void
 {
     QStringList all_keys = m_settings->allKeys();
 
@@ -394,8 +398,8 @@ void SettingsModel::load_settings_from_app_settings()
  * @param parent The parent node.
  * @return The newly created node.
  */
-SettingsNode* SettingsModel::create_node(const QString& group, const QString& key,
-                                         const QVariant& value, SettingsNode* parent)
+auto SettingsModel::create_node(const QString& group, const QString& key, const QVariant& value,
+                                SettingsNode* parent) -> SettingsNode*
 {
     SettingsNode* result = nullptr;
 
@@ -422,8 +426,8 @@ SettingsNode* SettingsModel::create_node(const QString& group, const QString& ke
  * @param group_node The parent group node.
  * @return The created or updated key node.
  */
-SettingsNode* SettingsModel::create_or_update_key_node(const QString& key, const QVariant& value,
-                                                       SettingsNode* group_node)
+auto SettingsModel::create_or_update_key_node(const QString& key, const QVariant& value,
+                                              SettingsNode* group_node) -> SettingsNode*
 {
     SettingsNode* key_node = nullptr;
     QModelIndex key_node_model_index;
@@ -450,7 +454,7 @@ SettingsNode* SettingsModel::create_or_update_key_node(const QString& key, const
 /**
  * @brief Returns a list of leaf nodes in the model.
  */
-QList<SettingsNode*> SettingsModel::get_leaf_nodes() const
+auto SettingsModel::get_leaf_nodes() const -> QList<SettingsNode*>
 {
     QList<SettingsNode*> leaf_nodes;
     collect_leaf_nodes(m_root_node, leaf_nodes);
@@ -463,7 +467,8 @@ QList<SettingsNode*> SettingsModel::get_leaf_nodes() const
  * @param node The node to start collecting from.
  * @param leaf_nodes The list of leaf nodes to populate.
  */
-void SettingsModel::collect_leaf_nodes(SettingsNode* node, QList<SettingsNode*>& leaf_nodes) const
+auto SettingsModel::collect_leaf_nodes(SettingsNode* node,
+                                       QList<SettingsNode*>& leaf_nodes) const -> void
 {
     if (node->child_count() == 0)
     {
@@ -481,7 +486,7 @@ void SettingsModel::collect_leaf_nodes(SettingsNode* node, QList<SettingsNode*>&
 /**
  * @brief Resets the model by clearing all the settings.
  */
-void SettingsModel::reset()
+auto SettingsModel::reset() -> void
 {
     beginResetModel();
     m_root_node->clear();

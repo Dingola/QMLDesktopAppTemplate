@@ -67,7 +67,7 @@ void QmlApplication::load(const QString& file_path)
  *
  * @return The exit code of the application.
  */
-int QmlApplication::exec()
+auto QmlApplication::exec() -> int
 {
     int result = -1;
     bool root_qml_file_loaded = !m_engine.rootObjects().isEmpty();

@@ -9,38 +9,38 @@ namespace QmlApp
 class SettingsNode
 {
     public:
-        explicit SettingsNode(const QString& group, const QString& key,
-                              const QVariant& value = QVariant(), SettingsNode* parent = nullptr);
+        explicit SettingsNode(QString group, QString key, QVariant value = QVariant(),
+                              SettingsNode* parent = nullptr);
         virtual ~SettingsNode();
 
-        void append_child(SettingsNode* child);
-        [[nodiscard]] SettingsNode* get_child(int row) const;
-        [[nodiscard]] QVector<SettingsNode*> child_items() const;
+        auto append_child(SettingsNode* child) -> void;
+        [[nodiscard]] auto get_child(int row) const -> SettingsNode*;
+        [[nodiscard]] auto child_items() const -> QVector<SettingsNode*>;
 
-        [[nodiscard]] int child_count() const;
-        [[nodiscard]] int column_count() const;
+        [[nodiscard]] auto child_count() const -> int;
+        [[nodiscard]] auto column_count() const -> int;
 
-        [[nodiscard]] QVariant data(int column) const;
+        [[nodiscard]] auto data(int column) const -> QVariant;
         void set_data(int column, const QVariant& value);
 
-        [[nodiscard]] int row() const;
-        [[nodiscard]] SettingsNode* get_parent_item() const;
+        [[nodiscard]] auto row() const -> int;
+        [[nodiscard]] auto get_parent_item() const -> SettingsNode*;
 
-        [[nodiscard]] bool has_parent() const;
-        [[nodiscard]] bool has_children() const;
+        [[nodiscard]] auto has_parent() const -> bool;
+        [[nodiscard]] auto has_children() const -> bool;
 
-        [[nodiscard]] SettingsNode* find_node_by_group(const QString& group) const;
-        [[nodiscard]] SettingsNode* find_node_by_key(const QString& key) const;
+        [[nodiscard]] auto find_node_by_group(const QString& group) const -> SettingsNode*;
+        [[nodiscard]] auto find_node_by_key(const QString& key) const -> SettingsNode*;
 
-        void set_value(const QVariant& value);
+        auto set_value(const QVariant& value) -> void;
 
-        [[nodiscard]] QString get_group() const;
-        [[nodiscard]] QString get_key() const;
-        [[nodiscard]] QVariant get_value() const;
+        [[nodiscard]] auto get_group() const -> QString;
+        [[nodiscard]] auto get_key() const -> QString;
+        [[nodiscard]] auto get_value() const -> QVariant;
 
-        [[nodiscard]] QString get_full_group() const;
+        [[nodiscard]] auto get_full_group() const -> QString;
 
-        void clear();
+        auto clear() -> void;
 
     private:
         QString m_group;

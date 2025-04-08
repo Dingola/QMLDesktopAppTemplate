@@ -45,14 +45,14 @@ class LogAppender
          * @param message The log message to append.
          * @param context The context of the log message.
          */
-        void append(const LogMessage& message, const QMessageLogContext& context);
+        auto append(const LogMessage& message, const QMessageLogContext& context) -> void;
 
         /**
          * @brief Sets the formatter for the log appender.
          *
          * @param formatter The formatter to set.
          */
-        void set_formatter(const QSharedPointer<LogFormatter>& formatter);
+        auto set_formatter(const QSharedPointer<LogFormatter>& formatter) -> void;
 
         /**
          * @brief Sets the log level of the log appender.
@@ -63,14 +63,14 @@ class LogAppender
          *
          * @param level The log level to set.
          */
-        void set_log_level(QtMsgType level);
+        auto set_log_level(QtMsgType level) -> void;
 
         /**
          * @brief Returns the current log level of the log appender.
          *
          * @return The current log level of the log appender.
          */
-        QtMsgType get_log_level() const;
+        [[nodiscard]] auto get_log_level() const -> QtMsgType;
 
     private:
         /**
@@ -83,8 +83,8 @@ class LogAppender
          * @param message The log message to append.
          * @param context The context of the log message.
          */
-        virtual void internal_append(const LogMessage& message,
-                                     const QMessageLogContext& context) = 0;
+        virtual auto internal_append(const LogMessage& message,
+                                     const QMessageLogContext& context) -> void = 0;
 
     protected:
         QSharedPointer<LogFormatter> m_formatter;

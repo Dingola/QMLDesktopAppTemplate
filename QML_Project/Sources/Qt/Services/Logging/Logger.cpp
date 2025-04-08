@@ -79,7 +79,7 @@ void Logger::set_log_level(QtMsgType level)
  *
  * @return The current log level of the logger.
  */
-QtMsgType Logger::get_log_level() const
+auto Logger::get_log_level() const -> QtMsgType
 {
     return m_log_level;
 }

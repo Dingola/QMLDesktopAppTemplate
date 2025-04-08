@@ -62,7 +62,7 @@ class Logger: public Singleton<Logger>
          *
          * @return The current log level of the logger.
          */
-        QtMsgType get_log_level() const;
+        [[nodiscard]] auto get_log_level() const -> QtMsgType;
 
     private:
         QList<QSharedPointer<LogAppender>> m_appenders;

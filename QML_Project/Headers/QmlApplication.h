@@ -15,12 +15,12 @@ class QmlApplication: public QObject
 
     public:
         explicit QmlApplication(QObject* parent = nullptr);
-        virtual ~QmlApplication() = default;
+        ~QmlApplication() override = default;
 
         void load(const QUrl& url);
         void load(const QString& file_path);
 
-        int exec();
+        auto exec() -> int;
 
     private:
         QQmlApplicationEngine m_engine;

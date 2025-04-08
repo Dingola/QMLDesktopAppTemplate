@@ -16,14 +16,15 @@ namespace QmlApp
  * @param type The type of the log message.
  * @param message The content of the log message.
  */
-LogMessage::LogMessage(QtMsgType type, const QString& message): m_type(type), m_message(message) {}
+LogMessage::LogMessage(QtMsgType type, QString message): m_type(type), m_message(std::move(message))
+{}
 
 /**
  * @brief Gets the type of the log message.
  *
  * @return The type of the log message.
  */
-QtMsgType LogMessage::get_type() const
+auto LogMessage::get_type() const -> QtMsgType
 {
     return m_type;
 }
@@ -33,7 +34,7 @@ QtMsgType LogMessage::get_type() const
  *
  * @return The content of the log message.
  */
-const QString& LogMessage::get_message() const
+auto LogMessage::get_message() const -> const QString&
 {
     return m_message;
 }

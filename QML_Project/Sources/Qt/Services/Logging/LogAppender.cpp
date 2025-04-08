@@ -33,7 +33,7 @@ LogAppender::LogAppender(const QSharedPointer<LogFormatter>& formatter)
  * @param message The log message to append.
  * @param context The context of the log message.
  */
-void LogAppender::append(const LogMessage& message, const QMessageLogContext& context)
+auto LogAppender::append(const LogMessage& message, const QMessageLogContext& context) -> void
 {
     if (message.get_type() >= m_log_level)
     {
@@ -48,7 +48,7 @@ void LogAppender::append(const LogMessage& message, const QMessageLogContext& co
  *
  * @param formatter The formatter to set.
  */
-void LogAppender::set_formatter(const QSharedPointer<LogFormatter>& formatter)
+auto LogAppender::set_formatter(const QSharedPointer<LogFormatter>& formatter) -> void
 {
     m_formatter = formatter;
 }
@@ -61,7 +61,7 @@ void LogAppender::set_formatter(const QSharedPointer<LogFormatter>& formatter)
  *
  * @param level The log level to set.
  */
-void LogAppender::set_log_level(QtMsgType level)
+auto LogAppender::set_log_level(QtMsgType level) -> void
 {
     m_log_level = level;
 }
@@ -73,7 +73,7 @@ void LogAppender::set_log_level(QtMsgType level)
  *
  * @return The current log level of the log appender.
  */
-QtMsgType LogAppender::get_log_level() const
+auto LogAppender::get_log_level() const -> QtMsgType
 {
     return m_log_level;
 }

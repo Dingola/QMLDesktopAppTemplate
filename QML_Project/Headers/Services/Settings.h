@@ -11,8 +11,9 @@ class Settings: public QObject
 
     public:
         explicit Settings(QObject* parent = nullptr);
-        virtual ~Settings() = default;
+        ~Settings() override = default;
 
+        // NOLINTBEGIN(modernize-use-trailing-return-type)
         [[nodiscard]] Q_INVOKABLE QVariant
         getValue(const QString& key, const QVariant& default_value = QVariant()) const;
         [[nodiscard]] Q_INVOKABLE QVariant getValue(const QString& group, const QString& key,
@@ -35,6 +36,7 @@ class Settings: public QObject
                                     QSettings::Format format = QSettings::IniFormat);
 
         Q_INVOKABLE void clear();
+        // NOLINTEND(modernize-use-trailing-return-type)
 
     private:
         void copy_settings(QSettings& source, QSettings& destination);

@@ -24,7 +24,7 @@ using namespace QmlApp;
  *
  * @return The exit code of the application.
  */
-int main(int argc, char* argv[])
+auto main(int argc, char* argv[]) -> int
 {
     // This line ensures that the resources are included in the final application binary when using
     // static linking.

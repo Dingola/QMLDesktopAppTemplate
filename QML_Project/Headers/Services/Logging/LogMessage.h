@@ -20,7 +20,7 @@ class LogMessage
          * @param type The type of the log message.
          * @param message The content of the log message.
          */
-        LogMessage(QtMsgType type = QtDebugMsg, const QString& message = QString());
+        LogMessage(QtMsgType type = QtDebugMsg, QString message = QString());
 
         /**
          * @brief Destroys the LogMessage object.
@@ -32,14 +32,14 @@ class LogMessage
          *
          * @return The type of the log message.
          */
-        [[nodiscard]] QtMsgType get_type() const;
+        [[nodiscard]] auto get_type() const -> QtMsgType;
 
         /**
          * @brief Gets the content of the log message.
          *
          * @return The content of the log message.
          */
-        [[nodiscard]] const QString& get_message() const;
+        [[nodiscard]] auto get_message() const -> const QString&;
 
     private:
         QtMsgType m_type;

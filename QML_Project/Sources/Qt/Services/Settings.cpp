@@ -29,6 +29,8 @@ Settings::Settings(QObject* parent)
             << ". Session Settings will be saved to: " << m_settings.fileName();
 }
 
+// NOLINTBEGIN(modernize-use-trailing-return-type)
+
 /**
  * @brief Gets the value associated with the specified key from the settings.
  *
@@ -240,4 +242,7 @@ void Settings::clear()
     qInfo() << "Clearing current session settings";
     m_settings.clear();
 }
+
+// NOLINTEND(modernize-use-trailing-return-type)
+
 }  // namespace QmlApp

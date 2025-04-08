@@ -23,7 +23,7 @@ fi
 SOLUTION_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
 
 # Set the build directory
-BUILD_DIR="${SOLUTION_DIR}/_build4"
+BUILD_DIR="${SOLUTION_DIR}/_build"
 
 # Output the solution and build directories
 echo "SOLUTION_DIR: ${SOLUTION_DIR}"

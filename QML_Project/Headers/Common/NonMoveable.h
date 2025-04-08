@@ -48,6 +48,6 @@ class NonMoveable
          * @param other The object to move from.
          * @return A reference to this object.
          */
-        NonMoveable& operator=(NonMoveable&&) = delete;
+        auto operator=(NonMoveable&&) -> NonMoveable& = delete;
 };
 }  // namespace QmlApp

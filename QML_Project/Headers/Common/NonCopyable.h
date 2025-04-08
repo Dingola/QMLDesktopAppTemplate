@@ -48,6 +48,6 @@ class NonCopyable
          * @param other The object to copy from.
          * @return A reference to this object.
          */
-        NonCopyable& operator=(const NonCopyable&) = delete;
+        auto operator=(const NonCopyable&) -> NonCopyable& = delete;
 };
 }  // namespace QmlApp
