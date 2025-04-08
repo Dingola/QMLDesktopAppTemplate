@@ -15,16 +15,16 @@ class ConsoleAppenderTest: public ::testing::Test
 {
     public:
         ConsoleAppenderTest();
-        ~ConsoleAppenderTest();
+        ~ConsoleAppenderTest() override;
 
     protected:
         void SetUp() override;
         void TearDown() override;
 
     public:
-        static std::string capture_console_output(std::function<void()> func);
-        static void customMessageHandler(QtMsgType type, const QMessageLogContext& context,
-                                         const QString& msg);
+        static auto capture_console_output(std::function<void()> func) -> std::string;
+        static auto customMessageHandler(QtMsgType type, const QMessageLogContext& context,
+                                         const QString& msg) -> void;
 
     public:
         QSharedPointer<ConsoleAppender> m_console_appender;

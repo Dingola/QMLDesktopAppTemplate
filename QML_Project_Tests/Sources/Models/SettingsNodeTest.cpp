@@ -7,7 +7,7 @@ TEST_F(SettingsNodeTest, ConstructorTest)
     QString group = "TestGroup";
     QString key = "TestKey";
     QVariant value = "TestValue";
-    SettingsNode* settings_node = new SettingsNode(group, key, value);
+    auto settings_node = new SettingsNode(group, key, value);
     EXPECT_EQ(settings_node->get_group(), group);
     EXPECT_EQ(settings_node->get_key(), key);
     EXPECT_EQ(settings_node->get_value(), value);
@@ -27,15 +27,15 @@ TEST_F(SettingsNodeTest, ConstructorTest)
 TEST_F(SettingsNodeTest, AppendChildTest)
 {
     // Test appending a child node
-    SettingsNode* child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
+    auto child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
     m_settings_node->append_child(child_node);
     QVector<SettingsNode*> child_items = m_settings_node->child_items();
     EXPECT_EQ(child_items.size(), 1);
     EXPECT_EQ(child_items[0], child_node);
 
     // Test appending multiple child nodes
-    SettingsNode* child_node_1 = new SettingsNode("ChildGroup1", "ChildKey1", "ChildValue1");
-    SettingsNode* child_node_2 = new SettingsNode("ChildGroup2", "ChildKey2", "ChildValue2");
+    auto child_node_1 = new SettingsNode("ChildGroup1", "ChildKey1", "ChildValue1");
+    auto child_node_2 = new SettingsNode("ChildGroup2", "ChildKey2", "ChildValue2");
     m_settings_node->append_child(child_node_1);
     m_settings_node->append_child(child_node_2);
     child_items = m_settings_node->child_items();
@@ -49,7 +49,7 @@ TEST_F(SettingsNodeTest, AppendChildTest)
 TEST_F(SettingsNodeTest, GetChildTest)
 {
     // Test getting a child node
-    SettingsNode* child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
+    auto child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
     m_settings_node->append_child(child_node);
     SettingsNode* result_node = m_settings_node->get_child(0);
     EXPECT_EQ(result_node, child_node);
@@ -63,8 +63,8 @@ TEST_F(SettingsNodeTest, GetChildTest)
 TEST_F(SettingsNodeTest, ChildItemsTest)
 {
     // Test getting child items
-    SettingsNode* child_node_1 = new SettingsNode("ChildGroup1", "ChildKey1", "ChildValue1");
-    SettingsNode* child_node_2 = new SettingsNode("ChildGroup2", "ChildKey2", "ChildValue2");
+    auto child_node_1 = new SettingsNode("ChildGroup1", "ChildKey1", "ChildValue1");
+    auto child_node_2 = new SettingsNode("ChildGroup2", "ChildKey2", "ChildValue2");
     m_settings_node->append_child(child_node_1);
     m_settings_node->append_child(child_node_2);
     QVector<SettingsNode*> child_items = m_settings_node->child_items();
@@ -82,8 +82,8 @@ TEST_F(SettingsNodeTest, ChildItemsTest)
 TEST_F(SettingsNodeTest, ChildCountTest)
 {
     // Test getting child count
-    SettingsNode* child_node_1 = new SettingsNode("ChildGroup1", "ChildKey1", "ChildValue1");
-    SettingsNode* child_node_2 = new SettingsNode("ChildGroup2", "ChildKey2", "ChildValue2");
+    auto child_node_1 = new SettingsNode("ChildGroup1", "ChildKey1", "ChildValue1");
+    auto child_node_2 = new SettingsNode("ChildGroup2", "ChildKey2", "ChildValue2");
     m_settings_node->append_child(child_node_1);
     m_settings_node->append_child(child_node_2);
     int child_count = m_settings_node->child_count();
@@ -138,7 +138,7 @@ TEST_F(SettingsNodeTest, RowTest)
     EXPECT_EQ(row, 0);
 
     // Test when node has parent
-    SettingsNode* parent_node = new SettingsNode("ParentGroup", "ParentKey", "ParentValue");
+    auto parent_node = new SettingsNode("ParentGroup", "ParentKey", "ParentValue");
     parent_node->append_child(m_settings_node);
     row = m_settings_node->row();
     EXPECT_EQ(row, 0);
@@ -152,7 +152,7 @@ TEST_F(SettingsNodeTest, GetParentItemTest)
     EXPECT_EQ(parent_item, nullptr);
 
     // Test when node has parent
-    SettingsNode* parent_node = new SettingsNode("ParentGroup", "ParentKey", "ParentValue");
+    auto parent_node = new SettingsNode("ParentGroup", "ParentKey", "ParentValue");
     parent_node->append_child(m_settings_node);
     parent_item = m_settings_node->get_parent_item();
     EXPECT_EQ(parent_item, parent_node);
@@ -166,7 +166,7 @@ TEST_F(SettingsNodeTest, HasParentTest)
     EXPECT_FALSE(has_parent);
 
     // Test when node has parent
-    SettingsNode* parent_node = new SettingsNode("ParentGroup", "ParentKey", "ParentValue");
+    auto parent_node = new SettingsNode("ParentGroup", "ParentKey", "ParentValue");
     parent_node->append_child(m_settings_node);
     has_parent = m_settings_node->has_parent();
     EXPECT_TRUE(has_parent);
@@ -180,7 +180,7 @@ TEST_F(SettingsNodeTest, HasChildrenTest)
     EXPECT_FALSE(has_children);
 
     // Test when node has children
-    SettingsNode* child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
+    auto child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
     m_settings_node->append_child(child_node);
     has_children = m_settings_node->has_children();
     EXPECT_TRUE(has_children);
@@ -190,13 +190,13 @@ TEST_F(SettingsNodeTest, HasChildrenTest)
 TEST_F(SettingsNodeTest, FindNodeByGroupTest)
 {
     // Test finding a node by group
-    SettingsNode* child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
+    auto child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
     m_settings_node->append_child(child_node);
     SettingsNode* result_node = m_settings_node->find_node_by_group("ChildGroup");
     EXPECT_EQ(result_node, child_node);
 
     // Test when node has grandchild
-    SettingsNode* grandchild_node =
+    auto grandchild_node =
         new SettingsNode("GrandchildGroup", "GrandchildKey", "GrandchildValue");
     child_node->append_child(grandchild_node);
     result_node = m_settings_node->find_node_by_group("GrandchildGroup");
@@ -207,13 +207,13 @@ TEST_F(SettingsNodeTest, FindNodeByGroupTest)
 TEST_F(SettingsNodeTest, FindNodeByKeyTest)
 {
     // Test finding a node by key
-    SettingsNode* child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
+    auto child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
     m_settings_node->append_child(child_node);
     SettingsNode* result_node = m_settings_node->find_node_by_key("ChildKey");
     EXPECT_EQ(result_node, child_node);
 
     // Test when node has grandchild
-    SettingsNode* grandchild_node =
+    auto grandchild_node =
         new SettingsNode("GrandchildGroup", "GrandchildKey", "GrandchildValue");
     child_node->append_child(grandchild_node);
     result_node = m_settings_node->find_node_by_key("GrandchildKey");
@@ -241,13 +241,13 @@ TEST_F(SettingsNodeTest, GetFullGroupTest)
     EXPECT_EQ(full_group, "");
 
     // Test when node has parent
-    SettingsNode* parent_node = new SettingsNode("ParentGroup", "ParentKey", "ParentValue");
+    auto parent_node = new SettingsNode("ParentGroup", "ParentKey", "ParentValue");
     parent_node->append_child(m_settings_node);
     full_group = m_settings_node->get_full_group();
     EXPECT_EQ(full_group, "ParentGroup");
 
     // Test when node has parent and grandparent
-    SettingsNode* grandparent_node =
+    auto grandparent_node =
         new SettingsNode("GrandparentGroup", "GrandparentKey", "GrandparentValue");
     grandparent_node->append_child(parent_node);
     full_group = m_settings_node->get_full_group();
@@ -263,7 +263,7 @@ TEST_F(SettingsNodeTest, ClearTest)
     EXPECT_TRUE(child_items.isEmpty());
 
     // Test clearing the node with children
-    SettingsNode* child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
+    auto child_node = new SettingsNode("ChildGroup", "ChildKey", "ChildValue");
     m_settings_node->append_child(child_node);
     m_settings_node->clear();
     child_items = m_settings_node->child_items();
@@ -274,7 +274,7 @@ TEST_F(SettingsNodeTest, ClearTest)
 TEST_F(SettingsNodeTest, DestructorTest)
 {
     // Test destructor
-    SettingsNode* settings_node = new SettingsNode("TestGroup", "TestKey", "TestValue");
+    auto settings_node = new SettingsNode("TestGroup", "TestKey", "TestValue");
     settings_node->append_child(new SettingsNode("ChildGroup", "ChildKey", "ChildValue"));
     delete settings_node;
 }

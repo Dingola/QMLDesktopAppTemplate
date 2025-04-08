@@ -73,7 +73,6 @@ TEST_F(SettingsModelTest, ParentTest)
     parent_index = m_settings_model->parent(group_index);
 
     // Check if the parent index is invalid and equals the root index
-    QModelIndex root_index = m_settings_model->index(0, 0);
     EXPECT_FALSE(parent_index.isValid());
     EXPECT_EQ(parent_index, QModelIndex());
 }
@@ -179,7 +178,7 @@ TEST_F(SettingsModelTest, SetDataTest)
     ASSERT_FALSE(result);
 
     // Test when index is valid and role is valid
-    result = m_settings_model->setData(key_index, value_2, Qt::EditRole);  // Update the value
+    m_settings_model->setData(key_index, value_2, Qt::EditRole);  // Update the value
     QVariant result_value = m_settings_model->getValue(key);
     EXPECT_EQ(result_value, value_2);
 }

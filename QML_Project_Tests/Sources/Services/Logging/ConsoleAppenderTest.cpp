@@ -59,7 +59,7 @@ void ConsoleAppenderTest::customMessageHandler(QtMsgType type, const QMessageLog
  * @param func The function whose console output is to be captured.
  * @return A string containing the captured console output.
  */
-std::string ConsoleAppenderTest::capture_console_output(std::function<void()> func)
+auto ConsoleAppenderTest::capture_console_output(std::function<void()> func) -> std::string
 {
     // Custom message handler to redirect qDebug output to the buffer
     auto original_handler = qInstallMessageHandler(
