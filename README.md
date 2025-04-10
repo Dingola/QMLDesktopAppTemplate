@@ -16,6 +16,7 @@ and Windows.
 <br><br>
 
 ## [Table of Contents]
+- [Solution Folder Structure](#solution-folder-structure)
 - [Configuration](#configuration)
   - [CMake Options](#cmake-options)
   - [Environment Variables](#environment-variables)
@@ -29,6 +30,42 @@ and Windows.
 - [Translations](#translations)
 - [Code Style and Linting](#code-style-and-linting)
 <br><br>
+
+## [Solution Folder Structure]
+
+```
+.
+├── .git                    # Git repository metadata
+├── .github                 # GitHub-specific files (CI workflows)
+├── CMake                   # CMake files used in both the project and tests
+├── Configs                 # Configuration files for clang-tidy, clang-format, Doxygen, etc.
+├── QML_Project             # The main project
+│   ├── CMake               # CMake files specific to the project
+│   ├── Docs                # Documentation files
+│   ├── Headers             # Header files
+│   ├── Resources           # Resource files
+│   ├── Sources             # Source files
+│   ├── ThirdParty          # CMake files for external dependencies
+│   ├── CMakeLists.txt      # CMake configuration file for the project
+│   ├── Config.h.in         # Configuration header template
+│   ├── main.cpp            # Main application entry point
+│   └── resources.qrc       # Qt resource file
+├── QML_Project_Tests       # Tests for the project
+│   ├── Docs                # Documentation files for tests
+│   ├── Headers             # Header files for tests
+│   ├── Sources             # Source files for tests
+│   ├── ThirdParty          # CMake files for external dependencies used in tests
+│   ├── CMakeLists.txt      # CMake configuration file for tests
+│   └── main.cpp            # Main entry point for tests
+├── Scripts                 # Scripts for building and deploying on various platforms
+│   ├── Win                 # Windows-specific scripts
+│   ├── Linux               # Linux-specific scripts
+│   └── Mac                 # Mac-specific scripts
+├── .gitignore              # Git ignore file
+├── CMakeLists.txt          # Top-level CMake configuration file
+└── README.md               # Project README file
+```
+<br><br><br>
 
 ## [Configuration]
 
@@ -159,6 +196,7 @@ To compile the translation files, use the following custom target:
 ```
 _translations_compile
 ```
+<br><br><br>
 
 ## [Code Style and Linting]
 
