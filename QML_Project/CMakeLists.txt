@@ -31,7 +31,8 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 ############################################
 
 # Set the documentation sub-target name
-set(doc_sub_target_name ${MAIN_PROJECT_NAME})
+set(DOC_OPTION_NAME ${MAIN_PROJECT_NAME})
+set(DOC_TARGET_NAME project)
 
 ############################################
 ### Setup Project File Includes          ###
@@ -127,7 +128,7 @@ if(USE_CLANG_FORMAT)
         # Define a custom target for formatting code
         add_custom_target(_run_clang_format_project
             COMMAND ${CLANG_FORMAT}
-            -style=file
+            -style=file:${CMAKE_SOURCE_DIR}/Configs/.clang-format
             -i
             ${Headers}
             ${CPP_Sources}
@@ -149,6 +150,7 @@ if(USE_CLANG_TIDY)
         # Define a custom target for running clang-tidy
         add_custom_target(_run_clang_tidy_project
             COMMAND ${CLANG_TIDY}
+			--config-file=${CMAKE_SOURCE_DIR}/Configs/.clang-tidy
             -p=${CMAKE_BINARY_DIR}
             ${Headers}
             ${CPP_Sources}

@@ -26,7 +26,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ############################################
 
 # Set the documentation sub-target name
-set(doc_sub_target_name ${PROJECT_NAME})
+set(DOC_OPTION_NAME ${MAIN_PROJECT_NAME}_Tests)
+set(DOC_TARGET_NAME tests)
 
 ############################################
 ### Setup Project File Includes          ###
@@ -81,7 +82,7 @@ if(USE_CLANG_FORMAT)
         # Define a custom target for formatting code
         add_custom_target(_run_clang_format_tests
             COMMAND ${CLANG_FORMAT}
-            -style=file
+            -style=file:${CMAKE_SOURCE_DIR}/Configs/.clang-format
             -i
             ${Headers}
             ${CPP_Sources}
@@ -103,6 +104,7 @@ if(USE_CLANG_TIDY)
         # Define a custom target for running clang-tidy
         add_custom_target(_run_clang_tidy_tests
             COMMAND ${CLANG_TIDY}
+			--config-file=${CMAKE_SOURCE_DIR}/Configs/.clang-tidy
             -p=${CMAKE_BINARY_DIR}
             ${Headers}
             ${CPP_Sources}
