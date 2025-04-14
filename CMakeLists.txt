@@ -11,6 +11,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Suppress specific compiler warnings
 #add_definitions("/wd4114")
 
+# Include CMake helper scripts
+include(${CMAKE_SOURCE_DIR}/CMake/BuildThirdPartyProject.cmake)
+
 ############################################
 ### Build Options                        ###
 ############################################
@@ -31,6 +34,9 @@ option(USE_CLANG_TIDY "Use clang-tidy for static analysis" OFF)
 # Option to specify the path to clang tools
 set(CLANG_TOOLS_PATH "" CACHE PATH "Path to clang tools (clang-format, clang-tidy)")
 
+# Option to use ccache
+option(USE_CCACHE "Use ccache for faster recompilation" OFF)
+
 # Path to ThirdParty directories
 if (WIN32)
     set(DEFAULT_THIRD_PARTY_PATH "$ENV{USERPROFILE}/ThirdParty")
@@ -38,6 +44,10 @@ else()
     set(DEFAULT_THIRD_PARTY_PATH "$ENV{HOME}/ThirdParty")
 endif()
 set(THIRD_PARTY_INCLUDE_DIR ${DEFAULT_THIRD_PARTY_PATH} CACHE PATH "Third Party Directory")
+
+if (USE_CCACHE)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/CCache.cmake)
+endif()
 
 ############################################
 ### Global Properties                    ###
@@ -55,7 +65,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Set the build type if not set
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel.")
+	set(CMAKE_BUILD_TYPE "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel.")
 endif()
 
 ############################################

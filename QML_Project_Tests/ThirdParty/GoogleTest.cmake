@@ -19,6 +19,7 @@ else()
         https://github.com/google/googletest.git
         ${Git_Tag}
         ${Third_Party_Target_Directory}
+		${CMAKE_BUILD_TYPE}
     )
 endif()
 
