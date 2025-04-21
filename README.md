@@ -27,6 +27,7 @@ and Windows.
   - [3) Configuring and Building](#3-configuring-and-building)
   - [4) Run the project](#4-run-the-project)
   - [5) Deployment](#5-deployment)
+  - [6) Using Docker](#6-using-docker)
 - [Translations](#translations)
 - [Code Style and Linting](#code-style-and-linting)
 <br><br>
@@ -61,6 +62,7 @@ and Windows.
 │   ├── Win                 # Windows-specific scripts
 │   ├── Linux               # Linux-specific scripts
 │   └── Mac                 # Mac-specific scripts
+├── Dockerfile              # Dockerfile for building and running the project in a container
 ├── .gitignore              # Git ignore file
 ├── CMakeLists.txt          # Top-level CMake configuration file
 └── README.md               # Project README file
@@ -122,6 +124,8 @@ and Windows.
 * CMake ( Minimum required version 3.19.0 ): [Download](https://cmake.org/download/ "CMake Downloads")
 * A C++20 compatible compiler (e.g., GCC 10+, Clang 10+, MSVC 19.28+)
 * Qt Installer (Qt 6.8): [Download](https://www.qt.io/download-qt-installer-oss)
+* Optional: Docker (if using the Docker workflow in [6) Using Docker](#6-using-docker)): [Download Docker](https://www.docker.com/)
+* Optional: VcXsrv (if displaying the GUI on a Windows host in [6) Using Docker](#6-using-docker)): [Download VcXsrv](https://sourceforge.net/projects/vcxsrv/)
 * Optional: Doxygen (if documentation generation is enabled): [Download](https://www.doxygen.nl/download.html)
 * Optional for Doxygen is LaTeX if enabled in `Doxygen.in`-File and installed.
 * Optional: `zip` for creating ZIP archives (if `BUILD_ZIP_ARCHIVE` is set to `true` in `build_and_deploy.sh`)
@@ -175,10 +179,78 @@ The project includes scripts for building, testing and deploying the application
 To create a ZIP archive of the deployment directory, set `BUILD_ZIP_ARCHIVE` to `true` in `build_and_deploy.sh`.
 
 To create an NSIS installer (Windows only), set `BUILD_NSIS_INSTALLER` to `true` in `build_and_deploy.sh`.
+
+---
+
+### 6) Using Docker
+
+#### 1. Build the Docker Image
+Build the Docker image using the following command:
+```
+docker build -t QMLDesktopAppTemplate-DockerImage .
+```
+
+#### 2. Ways to Run the Docker Image
+- **Run directly:**
+```
+docker run QMLDesktopAppTemplate-DockerImage
+```
+- **Start an interactive Bash shell:**
+```
+docker run -it QMLDesktopAppTemplate-DockerImage bash
+```
+
+#### 3. Run the App or Tests in the Container
+- **Start the app (virtual display with Xvfb):**
+```
+Xvfb :99 -screen 0 1920x1080x24 -nolisten tcp & export DISPLAY=:99 "./_build_app_release/QML_Project/QMLDesktopAppTemplate"
+```
+- **Run the tests (virtual display with Xvfb):**
+```
+Xvfb :99 -screen 0 1920x1080x24 -nolisten tcp & export DISPLAY=:99 "./_build_tests_release/QML_Project_Tests/QMLDesktopAppTemplate_Tests"
+```
+
+#### 4. Display GUI on the Host Machine (Windows)
+1. Download and install **VcXsrv Windows X Server**: [Download VcXsrv](https://sourceforge.net/projects/vcxsrv/).
+2. Configure VcXsrv:
+   - Select **Multiple windows** and set **Display number** to `99`.
+   - Choose **Start no client**.
+   - Enable **Disable access control**.
+   - Alternatively, use the preconfigured `config.xlaunch` file located in the `Configs` folder of this project. Double-click the file to launch VcXsrv with the correct settings.
+3. Start the Docker container:
+```
+docker run -it --name QMLDesktopAppTemplate-Container --network host -e DISPLAY=<IP-ADDRESS>:99.0 -e TERM=xterm-256color -e QT_X11_NO_MITSHM=1 QMLDesktopAppTemplate-DockerImage bash
+```
+> [!NOTE]
+> Replace `<IP-ADDRESS>` with the host's IP address (e.g., `192.168.1.2`). Do not use `127.0.0.1` or `localhost`.
+
+4. Inside the container:
+- **Start the app:**
+```
+"./_build_app_release/QML_Project/QMLDesktopAppTemplate"
+```
+- **Run the tests:**
+```
+"./_build_tests_release/QML_Project_Tests/QMLDesktopAppTemplate_Tests"
+```
+#### 5. Note on Display Number
+- The display number in the `DISPLAY` variable is **99.0**, not `99`.
+- You can verify this in the VcXsrv logs. Look for a line like:
+```
+winClipboardThreadProc - DISPLAY=127.0.0.1:99.0
+```
+- Ensure the `DISPLAY` variable is set correctly, e.g.:
+```
+export DISPLAY=192.168.1.2:99.0
+```
+
+#### 6. Additional Notes
+- Ensure the firewall on the host allows connections to the X11 server (VcXsrv).
+- If the GUI does not display, check the `DISPLAY` variable and the VcXsrv logs.
 <br><br><br>
 
 ## [Translations]
-The project includes custom targets for updating and compiling translation files. These targets are defined in the CMake file located in `QMLDesktopAppTemplate/QMLDesktopAppTemplate` and can be used to manage translation files located in the `QMLDesktopAppTemplate/QMLDesktopAppTemplate/resources/Translations` directory.
+The project includes custom targets for updating and compiling translation files. These targets are defined in the CMake file located in `QMLDesktopAppTemplate/QML_Project` and can be used to manage translation files located in the `QMLDesktopAppTemplate/QML_Project/resources/Translations` directory.
 
 > [!NOTE]
 > The translation files are specified in the CMake file. Initially, only `app_de.ts` and `app_en.ts` are included. To support additional languages, you will need to add the corresponding `.ts` files to the CMake configuration.
