@@ -13,7 +13,7 @@ on:
 # Environment Variables
 #------------------------------------------------
 env:
-    PROJECT_NAME: ${{github.event.repository.name}}
+    MAIN_PROJECT_NAME: ${{github.event.repository.name}}
     BUILD_TYPE: Release
     BUILD_TARGET_TYPE: static_library
     BUILD_TEST_PROJECT: true
@@ -69,7 +69,7 @@ jobs:
             # Configure CMake
             - name: Configure CMake
               run: |
-                cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TARGET_TYPE:STRING=${{env.BUILD_TARGET_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TEST_PROJECT:BOOL=${{env.BUILD_TEST_PROJECT}} -D THIRD_PARTY_INCLUDE_DIR:PATH=${{env.THIRD_PARTY_INCLUDE_DIR}}
+                cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DMAIN_PROJECT_NAME=${{env.MAIN_PROJECT_NAME}} -D${{env.MAIN_PROJECT_NAME}}_BUILD_TARGET_TYPE:STRING=${{env.BUILD_TARGET_TYPE}} -D${{env.MAIN_PROJECT_NAME}}_BUILD_TEST_PROJECT:BOOL=${{env.BUILD_TEST_PROJECT}} -DTHIRD_PARTY_INCLUDE_DIR:PATH=${{env.THIRD_PARTY_INCLUDE_DIR}}
 
             # Cache
             - name: Cache
@@ -86,7 +86,7 @@ jobs:
 
             # Tests
             - name: Tests
-              run: ${{github.workspace}}/build/QML_Project_Tests\${{env.BUILD_TYPE}}\${{env.PROJECT_NAME}}_Tests.exe
+              run: ${{github.workspace}}/build/QML_Project_Tests\${{env.BUILD_TYPE}}\${{env.MAIN_PROJECT_NAME}}_Tests.exe
 
     #------------------------------------------------
     # Linux build
@@ -116,7 +116,7 @@ jobs:
                     ${{runner.os}}-cache-
                     ${{runner.os}}-
 
-            # Instal Qt
+            # Install Qt
             - name: Install Qt
               uses: jurplel/install-qt-action@v4
               with:
@@ -142,7 +142,7 @@ jobs:
             # Configure CMake
             - name: Configure CMake
               run: |
-                cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TARGET_TYPE:STRING=${{env.BUILD_TARGET_TYPE}} -D ${{env.PROJECT_NAME}}_BUILD_TEST_PROJECT:BOOL=${{env.BUILD_TEST_PROJECT}} -D THIRD_PARTY_INCLUDE_DIR:PATH=${{env.THIRD_PARTY_INCLUDE_DIR}}
+                cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DMAIN_PROJECT_NAME=${{env.MAIN_PROJECT_NAME}} -D${{env.MAIN_PROJECT_NAME}}_BUILD_TARGET_TYPE:STRING=${{env.BUILD_TARGET_TYPE}} -D${{env.MAIN_PROJECT_NAME}}_BUILD_TEST_PROJECT:BOOL=${{env.BUILD_TEST_PROJECT}} -DTHIRD_PARTY_INCLUDE_DIR:PATH=${{env.THIRD_PARTY_INCLUDE_DIR}}
 
             # Cache
             - name: Cache
@@ -163,5 +163,4 @@ jobs:
                 Xvfb :99 &
                 export DISPLAY=:99
                 sleep 3
-                ${{github.workspace}}/build/QML_Project_Tests/${{env.PROJECT_NAME}}_Tests
-              
+                ${{github.workspace}}/build/QML_Project_Tests/${{env.MAIN_PROJECT_NAME}}_Tests

@@ -4,7 +4,18 @@ cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 ### Project Configuration                ###
 ############################################
 
-set(MAIN_PROJECT_NAME "QMLDesktopAppTemplate")
+set(PROJECT_NAME "")
+set(PROJECT_VER "0.0.0")
+set(PROJECT_VER_MAJOR "")
+set(PROJECT_VER_MINOR "")
+set(PROJECT_VER_PATCH "")
+
+# Set PROJECT_NAME to the folder name if it is not provided externally or is empty
+if (NOT PROJECT_NAME)
+    get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+endif()
+set(MAIN_PROJECT_NAME "${PROJECT_NAME}" CACHE STRING "Main project name")
+
 project(${MAIN_PROJECT_NAME}_Solution LANGUAGES CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
