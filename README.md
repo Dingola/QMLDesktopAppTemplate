@@ -20,9 +20,9 @@
 
 <br><br>
 
-## 🔐 Required: Personal Access Token (PAT) for GitHub Actions
+## 🔐 Required: Personal Access Token (PAT) and Codecov Token for GitHub Actions
 
-To use the GitHub Actions workflows included in this template, you need to create a Personal Access Token (PAT) and add it as a repository secret.
+To use the GitHub Actions workflows included in this template, you need to create a Personal Access Token (PAT) and add it as a repository secret. Additionally, for code coverage reporting, you need to add a `CODECOV_TOKEN` as a repository secret.
 
 ### 🔧 How to create the PAT:
 
@@ -43,6 +43,23 @@ To use the GitHub Actions workflows included in this template, you need to creat
    - **Secret**: *(paste the copied token)*
 
 This secret is required for the workflows to function correctly.
+
+### 🔧 How to get the Codecov Token:
+
+1. Go to your project on [Codecov](https://app.codecov.io/).
+2. Navigate to the **Configuration** page of your project.
+3. Find the **Repository Upload Token** and copy it.
+
+### 🔐 Add the Codecov Token as a repository secret:
+
+1. Open your repository on GitHub.
+2. Navigate to:
+   **Settings → Secrets and variables → Actions → New repository secret**
+3. Add the following:
+   - **Name**: `CODECOV_TOKEN`
+   - **Secret**: *(paste the copied token)*
+
+This token is required for uploading code coverage reports to Codecov.
 
 <br><br>
 
