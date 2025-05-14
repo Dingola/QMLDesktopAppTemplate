@@ -115,7 +115,6 @@ and Windows.
 ├── Configs                 # Configuration files for clang-tidy, clang-format, Doxygen, etc.
 ├── QML_Project             # The main project
 │   ├── CMake               # CMake files specific to the project
-│   ├── Docs                # Documentation files
 │   ├── Headers             # Header files
 │   ├── Resources           # Resource files
 │   ├── Sources             # Source files
@@ -125,7 +124,6 @@ and Windows.
 │   ├── main.cpp            # Main application entry point
 │   └── resources.qrc       # Qt resource file
 ├── QML_Project_Tests       # Tests for the project
-│   ├── Docs                # Documentation files for tests
 │   ├── Headers             # Header files for tests
 │   ├── Sources             # Source files for tests
 │   ├── ThirdParty          # CMake files for external dependencies used in tests
@@ -158,7 +156,7 @@ and Windows.
 
 * **CLANG_TOOLS_PATH:** Specifies the path to the `clang-format` and `clang-tidy` executables.
 
-* **<PROJECT_NAME>_BUILD_DOC:** Specifies whether **documentation** should be created for the app and/or the test app. The generated documentation is located in the `doc` folder of the respective project under `Docs/Doxygen/`. The formatting specifications for the documentation can be adjusted centrally in the config file **Doxyfile.in**, which is located in the solution folder. Default is **Off**.
+* **<PROJECT_NAME>_BUILD_DOC:** Specifies whether **documentation** should be generated for the app and/or its test project. The generated documentation is located in the `doc` folder within the binary directory, with separate subfolders for the app and the test project. The formatting specifications for the documentation can be centrally configured in the Doxyfile.in file, located in the solution folder. The default setting is **Off**.
 
 * **THIRD_PARTY_INCLUDE_DIR:** Specifies where the third-party libraries will be installed. The default path is:
   - **`$USERPROFILE/ThirdParty`** on Windows

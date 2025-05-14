@@ -7,7 +7,7 @@ if (${BUILD_DOC})
 	if (DOXYGEN_FOUND)
 		# set input and output files
 		set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/Configs/Doxyfile.in)
-		set(DOXYGEN_OUT ${CMAKE_CURRENT_SOURCE_DIR}/Docs/Doxyfile)
+		set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/Docs/${DOC_OPTION_NAME}/Doxyfile)
 
 		# request to configure the file
 		configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
