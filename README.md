@@ -2,17 +2,11 @@
 
 ## 🚀 [Build Status]
 
-### 🛠 Build
+### 🛠 Build and ✅ Test
 
-[![Linux Build](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_linux.yml/badge.svg)](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_linux.yml)
-[![macOS Build](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_macos.yml/badge.svg)](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_macos.yml)
-[![Windows Build](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_windows.yml/badge.svg)](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_windows.yml)
-
-### ✅ Tests
-
-[![Linux Test](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/test_linux.yml/badge.svg)](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/test_linux.yml)
-[![macOS Test](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/test_macos.yml/badge.svg)](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/test_macos.yml)
-[![Windows Test](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/test_windows.yml/badge.svg)](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/test_windows.yml)
+[![Linux Build and Test](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_and_test_linux.yml/badge.svg)](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_and_test_linux.yml)
+[![macOS Build and Test](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_and_test_macos.yml/badge.svg)](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_and_test_macos.yml)
+[![Windows Build and Test](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_and_test_windows.yml/badge.svg)](https://github.com/Dingola/QMLDesktopAppTemplate/actions/workflows/build_and_test_windows.yml)
 
 ### Code Coverage
 
@@ -20,46 +14,49 @@
 
 <br><br>
 
-## 🔐 Required: Personal Access Token (PAT) and Codecov Token for GitHub Actions
+## 🔐 Tokens for GitHub Actions
 
-To use the GitHub Actions workflows included in this template, you need to create a Personal Access Token (PAT) and add it as a repository secret. Additionally, for code coverage reporting, you need to add a `CODECOV_TOKEN` as a repository secret.
+Some workflows in this repository require tokens to function correctly. Below are the details for the required tokens and how to configure them.
 
-### 🔧 How to create the PAT:
+### 1. Codecov Token (Required for Code Coverage)
+
+The **CODECOV_TOKEN** is required to upload code coverage reports to [Codecov](https://codecov.io). This token ensures that only authorized users can upload coverage data for your repository.
+
+#### How to create the Codecov Token:
+
+1. Go to your repository on [Codecov](https://codecov.io).
+2. Navigate to **Settings → Repository → Upload Token**.
+3. Copy the generated token.
+
+### 2. Personal Access Token (PAT) [Optional]
+
+The **Personal Access Token (PAT)** is only required for the disabled workflows in this repository. These workflows are kept for reference and are not actively used in the CI/CD pipeline.
+
+#### How to create the PAT:
 
 1. Go to [GitHub Personal Access Tokens](https://github.com/settings/tokens).
 2. Click **“Generate new token (classic)”**.
-3. Set a name (e.g., `CI Token`) and expiration date.
+3. Set a name (e.g., `Legacy CI Token`) and expiration date.
 4. Under **Scopes**, check:
    - `repo`
 5. Click **“Generate token”** and copy the token immediately.
 
-### 🔐 Add the PAT as a repository secret:
+### Adding Tokens as Repository Secrets
+
+Once you have generated the required tokens, add them as secrets in your GitHub repository:
 
 1. Open your repository on GitHub.
 2. Navigate to:
    **Settings → Secrets and variables → Actions → New repository secret**
-3. Add the following:
-   - **Name**: `PAT_TOKEN`
-   - **Secret**: *(paste the copied token)*
+3. Add the following secrets:
+   - **For Codecov**:
+     - **Name**: `CODECOV_TOKEN`
+     - **Secret**: *(paste the Codecov token)*
+   - **For Disabled Workflows**:
+     - **Name**: `PAT_TOKEN`
+     - **Secret**: *(paste the PAT token)*
 
-This secret is required for the workflows to function correctly.
-
-### 🔧 How to get the Codecov Token:
-
-1. Go to your project on [Codecov](https://app.codecov.io/).
-2. Navigate to the **Configuration** page of your project.
-3. Find the **Repository Upload Token** and copy it.
-
-### 🔐 Add the Codecov Token as a repository secret:
-
-1. Open your repository on GitHub.
-2. Navigate to:
-   **Settings → Secrets and variables → Actions → New repository secret**
-3. Add the following:
-   - **Name**: `CODECOV_TOKEN`
-   - **Secret**: *(paste the copied token)*
-
-This token is required for uploading code coverage reports to Codecov.
+> **Note**: The `CODECOV_TOKEN` is required for the `build_and_test_linux.yml` workflow to upload coverage reports. The `PAT_TOKEN` is only needed for the disabled workflows.
 
 <br><br>
 
