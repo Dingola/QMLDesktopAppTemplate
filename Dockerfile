@@ -89,7 +89,8 @@ RUN mkdir -p ${THIRD_PARTY_INCLUDE_DIR} || exit 1
 RUN if [ "$BUILD_APP_PROJECT" = "true" ]; then \
     cmake -B _build_app_release -S . \
         -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-        -DTHIRD_PARTY_INCLUDE_DIR=${THIRD_PARTY_INCLUDE_DIR} || exit 1 \
+        -DTHIRD_PARTY_INCLUDE_DIR=${THIRD_PARTY_INCLUDE_DIR} \
+        -DMAIN_PROJECT_NAME=${PROJECT_NAME} || exit 1 \
     && cmake --build _build_app_release --config ${BUILD_TYPE} || exit 1; \
     fi
 
@@ -99,7 +100,8 @@ RUN if [ "$BUILD_TEST_PROJECT" = "true" ]; then \
         -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
         -D${PROJECT_NAME}_BUILD_TARGET_TYPE=static_library \
         -D${PROJECT_NAME}_BUILD_TEST_PROJECT=true \
-        -DTHIRD_PARTY_INCLUDE_DIR=${THIRD_PARTY_INCLUDE_DIR} || exit 1 \
+        -DTHIRD_PARTY_INCLUDE_DIR=${THIRD_PARTY_INCLUDE_DIR} \
+        -DMAIN_PROJECT_NAME=${PROJECT_NAME} || exit 1 \
     && cmake --build _build_tests_release --config ${BUILD_TYPE} || exit 1; \
     fi
 

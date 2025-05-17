@@ -270,18 +270,18 @@ To create an NSIS installer (Windows only), set `BUILD_NSIS_INSTALLER` to `true`
 #### 1. Build the Docker Image
 Build the Docker image using the following command:
 ```
-docker build -t QMLDesktopAppTemplate-DockerImage .
+docker build -t qmldesktopapptemplate-dockerimage .
 ```
 <br>
 
 #### 2. Ways to Run the Docker Image
 - **Run directly:**
 ```
-docker run QMLDesktopAppTemplate-DockerImage
+docker run qmldesktopapptemplate-dockerimage
 ```
 - **Start an interactive Bash shell:**
 ```
-docker run -it QMLDesktopAppTemplate-DockerImage bash
+docker run -it qmldesktopapptemplate-dockerimage bash
 ```
 <br>
 
