@@ -84,7 +84,7 @@ add_custom_target(gen_qrc DEPENDS ${RSCS})
 ### Translation Configuration            ###
 ############################################
 
-set(TS_DIR ${PROJECT_NAME}/resources/Translations)
+set(TS_DIR QML_Project/Resources/Translations)
 set(TS_FILES ${TS_DIR}/app_de.ts ${TS_DIR}/app_en.ts)
 
 # Ensure the translations directory exists

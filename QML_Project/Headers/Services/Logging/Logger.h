@@ -1,10 +1,11 @@
 #pragma once
 
+#include <CommonLib/Patterns/Singleton.h>
+
 #include <QList>
 #include <QSharedPointer>
 #include <QString>
 
-#include <CommonLib/Patterns/Singleton.h>
 #include "Services/Logging/LogAppender.h"
 
 namespace QmlApp
