@@ -4,7 +4,7 @@
 #include <QSharedPointer>
 #include <QString>
 
-#include "Common/Singleton.h"
+#include <CommonLib/Patterns/Singleton.h>
 #include "Services/Logging/LogAppender.h"
 
 namespace QmlApp
@@ -16,9 +16,9 @@ namespace QmlApp
  * This class provides methods to log messages with different severity levels.
  * It supports adding multiple log appenders to direct log messages to various destinations.
  */
-class Logger: public Singleton<Logger>
+class Logger: public CommonLib::Singleton<Logger>
 {
-        friend class Singleton<Logger>;
+        friend class CommonLib::Singleton<Logger>;
 
     private:
         Logger() = default;
