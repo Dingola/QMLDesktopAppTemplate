@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 ### Project Configuration                ###
 ############################################
 
-project(QML_Project LANGUAGES CXX VERSION "0.0.0")
+project(${MAIN_PROJECT_NAME} LANGUAGES CXX VERSION "0.0.0")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 configure_file(Config.h.in Config.h)
 

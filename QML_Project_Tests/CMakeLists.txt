@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 ### Setup project                        ###
 ############################################
 
-project(QML_Project_Tests LANGUAGES CXX VERSION "0.0.0")
+project(${MAIN_PROJECT_NAME}_Tests LANGUAGES CXX VERSION "0.0.0")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Include CMake helper scripts
@@ -203,7 +203,7 @@ GROUP_FILES("${Sources}" "Source Files")
 GROUP_FILES("${Headers}" "Header Files")
 
 # Specifies include libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC QML_Project)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${MAIN_PROJECT_NAME})
 
 # Specifies include directories to use when compiling a given target
 target_include_directories(${PROJECT_NAME} PUBLIC 
