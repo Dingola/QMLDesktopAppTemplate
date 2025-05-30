@@ -280,10 +280,12 @@ group_files("${Sources}" "Source Files")
 group_files("${Headers}" "Header Files")
 
 # Specifies include directories to use when compiling a given target
-set(include_dirs "${CMAKE_CURRENT_LIST_DIR} ${PROJECT_BINARY_DIR}")
-target_include_directories(${PROJECT_NAME} PUBLIC 
-	$<BUILD_INTERFACE:${include_dirs}>
-	$<INSTALL_INTERFACE:include> 
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Headers>
+        $<INSTALL_INTERFACE:include>
+    PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Headers/Private>
 )
 
 ############################################
